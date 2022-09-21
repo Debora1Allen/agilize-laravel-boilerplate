@@ -1,5 +1,7 @@
 <?php
 
+use App\Packages\Aluno\Controller\AlunoController;
+use App\Packages\Prova\Controller\ProvaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +19,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::get('/healthcheck', function () {
+    return json_encode(['status' => true]);
+});
+
+Route::get('/aluno', [AlunoController::class, 'index']);
+Route::get('/prova', [ProvaController::class, 'index']);
