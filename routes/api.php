@@ -26,4 +26,6 @@ Route::get('/healthcheck', function () {
 });
 
 Route::get('/aluno', [AlunoController::class, 'index']);
+Route::post('/aluno', [AlunoController::class, 'store']);
 Route::get('/prova', [ProvaController::class, 'index']);
+Route::post('/prova', [ProvaController::class, 'store']);

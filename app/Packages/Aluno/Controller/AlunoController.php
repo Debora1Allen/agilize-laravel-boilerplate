@@ -16,5 +16,19 @@ class AlunoController extends Controller
     {
         return 'aqui';
     }
-    
+
+    public function store()
+    {
+
+    }
+
+    public function update()
+    {
+
+    }
+
+    public function show()
+    {
+
+    }
 }

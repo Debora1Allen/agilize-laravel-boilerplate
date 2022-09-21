@@ -16,4 +16,19 @@ class ProvaController extends Controller
     {
         return 'aqui prova';
     }
+
+    public function store()
+    {
+
+    }
+
+    public function update()
+    {
+
+    }
+
+    public function show()
+    {
+
+    }
 }
