@@ -4,6 +4,7 @@ namespace App\Packages\Aluno\Controller;
 
 use App\Http\Controllers\Controller;
 use App\Packages\Aluno\Repository\AlunoRepository;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Psy\Util\Json;
@@ -37,9 +38,17 @@ class AlunoController extends Controller
         return response()->json($alunosArray->toArray());
     }
 
-    public function store()
+    /**
+     * @throws Exception
+     */
+    public function store(Request $request)
     {
+        try{
+        $aluno = $request->get('id');
 
+        }catch (Exception $exception){
+            throw new Exception($exception->getMessage(), 1664303115);
+        }
     }
 
     public function update()

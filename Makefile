@@ -23,3 +23,10 @@ all-tests:
 
 key-generate:
 	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "php artisan key:generate"
+
+migration:
+	@docker-compose exec -T php_rh php artisan doctrine:migrations:diff
+	@docker-compose exec php_rh chmod 777 database/migrations/* -R
+
+migrate:
+	@docker-compose exec -T php_rh php artisan doctrine:migrations:migrate
