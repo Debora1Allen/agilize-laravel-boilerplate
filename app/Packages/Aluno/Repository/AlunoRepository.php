@@ -7,6 +7,8 @@ use App\Packages\Base\Repository\AbstractRepository;
 
 class AlunoRepository extends AbstractRepository
 {
+    public string $entityName = Aluno::class;
+
     public function findAllAlunos()
     {
         return $this->findAll();
