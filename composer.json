@@ -14,7 +14,8 @@
         "doctrine/migrations": "3.4",
         "gedmo/doctrine-extensions": "^3.8",
         "laravel-doctrine/extensions": "^1.5",
-        "laravel-doctrine/orm": "^1.8"
+        "laravel-doctrine/orm": "^1.8",
+      "ext-http": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

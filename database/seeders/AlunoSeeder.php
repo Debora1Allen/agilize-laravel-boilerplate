@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
-class Aluno extends Seeder
+class AlunoSeeder extends Seeder
 {
     /**
      * @var \App\Packages\Aluno\Models\Aluno
@@ -19,11 +19,9 @@ class Aluno extends Seeder
      */
     public function run()
     {
-
-        $nome = $this->aluno->getNome() ;
+        $nome = $this->aluno->getNome();
         $telenone = $this->aluno->getTelefone();
-        $email = $this->aluno->getEmail() ;
-        EntityManager::persist(new \App\Packages\Aluno\Models\Aluno($nome,$email,$telenone));
+        EntityManager::persist(new \App\Packages\Aluno\Models\Aluno($nome,$telenone));
 
         EntityManager::flush();
     }

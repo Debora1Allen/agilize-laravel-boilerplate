@@ -3,7 +3,9 @@
 namespace App\Packages\Aluno\Controller;
 
 use App\Http\Controllers\Controller;
+use App\Packages\Aluno\Models\Aluno;
 use App\Packages\Aluno\Repository\AlunoRepository;
+use App\Packages\Aluno\Request\AlunoFormRequest;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -41,11 +43,12 @@ class AlunoController extends Controller
     /**
      * @throws Exception
      */
-    public function store(Request $request)
+    public function store(Request $request):JsonResponse
     {
         try{
-        $aluno = $request->get('id');
-
+            $nome = $request->get('nome');
+            $telefone = $request->get('telefone');
+            return response()->json($this->alunoRepository->add(new Aluno($nome,$telefone)), 201);
         }catch (Exception $exception){
             throw new Exception($exception->getMessage(), 1664303115);
         }

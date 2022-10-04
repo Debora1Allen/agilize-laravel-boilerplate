@@ -2,9 +2,11 @@
 
 namespace App\Packages\Aluno\Models;
 
+use App\Packages\Prova\Models\Prova;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Illuminate\Support\Str;
+use mysql_xdevapi\Collection;
 
 /**
  * @ORM\Entity
@@ -13,44 +15,34 @@ use Illuminate\Support\Str;
 class Aluno
 {
     use TimestampableEntity;
+
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\Column(name="id", type="guid")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     protected string $id;
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
     protected string $nome;
 
     /**
-     * @var string
-     * @ORM\Column(type="string")
+     *  @ORM\OneToMany(targetEntity="\App\Packages\Prova\Models\Prova", mappedBy="aluno")
      */
-    protected string $email;
+    protected Collection $prova;
 
     /**
-     * @var integer
      * @ORM\Column(type="integer")
      */
     protected int $telefone;
 
-    public function __construct(string $nome, string $email, int $telefone)
+    public function __construct(string $nome, int $telefone)
     {
         $this->id = Str::uuid()->toString();
         $this->nome = $nome;
-        $this->email = $email;
         $this->telefone = $telefone;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail(): string
-    {
-        return $this->email;
     }
 
     /**
