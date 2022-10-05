@@ -75,9 +75,9 @@ class Prova
     }
 
     /**
-     * @return Questao
+     * @return Collection
      */
-    public function getQuestao(): Questao
+    public function getQuestao(): Collection
     {
         return $this->questao;
     }

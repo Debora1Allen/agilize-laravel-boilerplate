@@ -37,11 +37,10 @@ class Resposta
     protected Questao $questao;
 
     /**
-     * @param string $id
      * @param string $texto
      * @param bool $correta
      */
-    public function __construct(string $id, string $texto, bool $correta)
+    public function __construct( string $texto, bool $correta)
     {
         $this->id = Str::uuid()->toString();
         $this->texto = $texto;

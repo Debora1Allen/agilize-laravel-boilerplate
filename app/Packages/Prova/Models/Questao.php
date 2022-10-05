@@ -26,21 +26,44 @@ class Questao
     protected string $texto;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Prova", inversedBy="questao")
+     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Tema", inversedBy="questao")
      */
-    protected Prova $prova;
+    protected Tema $tema;
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTexto(): string
+    {
+        return $this->texto;
+    }
+
+    /**
+     * @return Tema
+     */
+    public function getTema(): Tema
+    {
+        return $this->tema;
+    }
 
 
     /**
-     * @param string $id
      * @param string $texto
-     * @param Prova $prova
+     * @param Tema $tema;
      */
-    public function __construct(string $texto, Prova $prova)
+    public function __construct(string $texto,Tema $tema)
     {
         $this->id = Str::uuid()->toString();
         $this->texto = $texto;
-        $this->prova = $prova;
+        $this->tema = $tema;
 
     }
 }
