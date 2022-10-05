@@ -15,7 +15,8 @@
         "gedmo/doctrine-extensions": "^3.8",
         "laravel-doctrine/extensions": "^1.5",
         "laravel-doctrine/orm": "^1.8",
-      "ext-http": "*"
+      "ext-http": "*",
+      "ext-mysql_xdevapi": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

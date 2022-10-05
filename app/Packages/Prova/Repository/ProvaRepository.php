@@ -9,7 +9,7 @@ use App\Packages\Prova\Models\Prova;
 class ProvaRepository extends AbstractRepository
 {
 
-    public function createProva(Prova $prova)
+    public function add(Prova $prova):Prova
     {
         $this->getEntityManager()->persist($prova);
         $this->getEntityManager()->flush();

@@ -34,7 +34,6 @@ class AlunoController extends Controller
             $alunosArray->add([
                 'id' => $aluno->getId(),
                 'telefone' => $aluno->getTelefone(),
-                'email'  => $aluno->getEmail()
             ]);
         }
         return response()->json($alunosArray->toArray());

@@ -5,8 +5,9 @@ namespace App\Packages\Aluno\Models;
 use App\Packages\Prova\Models\Prova;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use mysql_xdevapi\Collection;
+
 
 /**
  * @ORM\Entity
@@ -28,10 +29,10 @@ class Aluno
      */
     protected string $nome;
 
-    /**
-     *  @ORM\OneToMany(targetEntity="\App\Packages\Prova\Models\Prova", mappedBy="aluno")
-     */
-    protected Collection $prova;
+//    /**
+//     *  @ORM\OneToMany(targetEntity="\App\Packages\Prova\Models\Prova", mappedBy="aluno")
+//     */
+//    protected Collection $prova;
 
     /**
      * @ORM\Column(type="integer")
