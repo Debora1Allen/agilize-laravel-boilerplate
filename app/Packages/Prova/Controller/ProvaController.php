@@ -23,7 +23,7 @@ class ProvaController extends Controller
     }
 
 
-    public function index(Request $request)
+    public function show(Request $request)
     {
         $idProva = $request->get('id');
         $prova = $this->provaRepository->findOneProvaById($idProva);
@@ -52,8 +52,5 @@ class ProvaController extends Controller
 
     }
 
-    public function show()
-    {
 
-    }
 }
