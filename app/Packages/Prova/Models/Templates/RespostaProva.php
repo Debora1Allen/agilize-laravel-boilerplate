@@ -7,6 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 class RespostaProva
+
+    /**
+     * @ORM\Entity
+     * @ORM\Table(name="resposta_prova")
+     */
 {
 
     use TimestampableEntity;
@@ -24,7 +29,7 @@ class RespostaProva
     protected string $texto;
 
     /**
-     * @ORM\ManyToOne(targetEntity="/App/Packages/Prova/Models/Templates/QuestaoProva", inversedBy="resposta_prova")
+     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Templates\QuestaoProva", inversedBy="resposta_prova")
      */
     protected QuestaoProva $questaoProva;
     /**

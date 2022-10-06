@@ -2,6 +2,7 @@
 
 use App\Packages\Aluno\Controller\AlunoController;
 use App\Packages\Prova\Controller\ProvaController;
+use App\Packages\Prova\Controller\QuestaoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,4 @@ Route::get('/aluno', [AlunoController::class, 'index']);
 Route::post('/aluno', [AlunoController::class, 'store']);
 Route::get('/prova', [ProvaController::class, 'show']);
 Route::post('/prova', [ProvaController::class, 'store']);
+Route::post('/questao', [QuestaoController::class, 'store']);

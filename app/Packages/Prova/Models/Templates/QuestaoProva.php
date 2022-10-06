@@ -9,6 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 class QuestaoProva
+
+    /**
+     * @ORM\Entity
+     * @ORM\Table(name="questao_prova")
+     */
 {
     use TimestampableEntity;
 
