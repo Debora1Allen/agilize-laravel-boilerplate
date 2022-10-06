@@ -40,7 +40,7 @@ class QuestaoController
            $tema = $this->questaoRepository->findTema();
             return response()->json($this->questaoRepository->add(new Questao($texto,$tema)), 201);
         }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1664303115);
+            throw new Exception($exception->getMessage(), 1665091019);
         }
     }
 }

@@ -27,16 +27,21 @@ class AlunoController extends Controller
 
     public function index()
     {
-        $alunos = $this->alunoRepository->findAllAlunos();
-        $alunosArray = collect();
+        try{
+            $alunos = $this->alunoRepository->findAllAlunos();
+            $alunosArray = collect();
 
-        foreach ($alunos as $aluno){
-            $alunosArray->add([
-                'id' => $aluno->getId(),
-                'telefone' => $aluno->getTelefone(),
-            ]);
+            foreach ($alunos as $aluno){
+                $alunosArray->add([
+                    'id' => $aluno->getId(),
+                    'telefone' => $aluno->getTelefone(),
+                ]);
+            }
+            return response()->json($alunosArray->toArray());
+
+        }catch (Exception $exception){
+            throw new Exception($exception->getMessage(), 1665091293);
         }
-        return response()->json($alunosArray->toArray());
     }
 
     /**

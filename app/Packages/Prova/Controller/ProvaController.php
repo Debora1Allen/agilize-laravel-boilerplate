@@ -25,10 +25,14 @@ class ProvaController extends Controller
 
     public function show(Request $request)
     {
-        $idProva = $request->get('id');
-        $prova = $this->provaRepository->findOneProvaById($idProva);
+        try{
+            $idProva = $request->get('id');
+            $prova = $this->provaRepository->findOneProvaById($idProva);
+            return response()->json($prova);
 
-        return response()->json($prova);
+        }catch (Exception $exception){
+            throw new Exception($exception->getMessage(), 1665091313);
+        }
     }
 
     /**
@@ -41,8 +45,9 @@ class ProvaController extends Controller
             $tema = $request->get('tema');
             $questao = $request->get('questao');
             return response()->json($this->provaRepository->add(new Prova($aluno,$tema,$questao)), 201);
+
         }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1664303115);
+            throw new Exception($exception->getMessage(), 1665091042);
         }
     }
 

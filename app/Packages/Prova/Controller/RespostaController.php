@@ -39,7 +39,7 @@ class RespostaController
            $correta = $request->get('correta');
             return response()->json($this->respostaRepository->add(new Resposta($texto,$correta)), 201);
         }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1664303115);
+            throw new Exception($exception->getMessage(), 1665090977);
         }
     }
 }
