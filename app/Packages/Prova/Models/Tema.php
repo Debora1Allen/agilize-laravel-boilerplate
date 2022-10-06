@@ -3,6 +3,8 @@
 namespace App\Packages\Prova\Models;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Illuminate\Support\Str;
 use mysql_xdevapi\Collection;
 
 /**
@@ -11,6 +13,8 @@ use mysql_xdevapi\Collection;
  */
 class Tema
 {
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="guid")
@@ -30,12 +34,11 @@ class Tema
     protected Collection $prova;
 
     /**
-     * @param string $id
      * @param string $nome
      */
-    public function __construct(string $id, string $nome)
+    public function __construct(string $nome)
     {
-        $this->id = $id;
+        $this->id = Str::uuid()->toString();
         $this->nome = $nome;
     }
 
