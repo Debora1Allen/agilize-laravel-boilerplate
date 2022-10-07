@@ -3,7 +3,6 @@
 namespace App\Packages\Prova\Controller;
 
 use App\Http\Controllers\Controller;
-use App\Packages\Aluno\Models\Aluno;
 use App\Packages\Prova\Models\Prova;
 use App\Packages\Prova\Repository\ProvaRepository;
 use Exception;

@@ -33,21 +33,54 @@ class Prova
 
 
     /**
-     *  @ORM\OneToMany(targetEntity="\App\Packages\Prova\Models\Questao", mappedBy="prova")
+     *  @ORM\OneToMany(targetEntity="\App\Packages\Prova\Models\Questao", mappedBy="prova", cascade="persist")
      */
     protected Collection $questao;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected int $quantidadeQuestoes;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected \DateTime $dataFinalizacao;
+
+
+    /**
+     * @ORM\Column(type="integer", nullable= "true")
+     */
+    protected int $nota;
+
+    /**
+     * @return int
+     */
+    public function getQuantidadeQuestoes(): int
+    {
+        return $this->quantidadeQuestoes;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNota(): int
+    {
+        return $this->nota;
+    }
+
+
+    /**
      * @param Aluno $aluno
      * @param Tema $tema
-     * @param Collection $questao
+     * @param int $quantidadeQuestoes
      */
-    public function __construct(Aluno $aluno, Tema $tema, Collection $questao)
+    public function __construct(Aluno $aluno, Tema $tema, int $quantidadeQuestoes)
     {
         $this->id = Str::uuid()->toString();;
         $this->aluno = $aluno;
         $this->tema = $tema;
-        $this->questao = $questao;
+        $this->quantidadeQuestoes = $quantidadeQuestoes;
     }
 
     /**
