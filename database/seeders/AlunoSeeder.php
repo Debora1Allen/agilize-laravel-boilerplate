@@ -20,8 +20,9 @@ class AlunoSeeder extends Seeder
     public function run()
     {
         $nome = $this->aluno->getNome();
+        $email = $this->aluno->getEmail();
         $telenone = $this->aluno->getTelefone();
-        EntityManager::persist(new \App\Packages\Aluno\Models\Aluno($nome,$telenone));
+        EntityManager::persist(new \App\Packages\Aluno\Models\Aluno($nome,$telenone, $email));
 
         EntityManager::flush();
     }

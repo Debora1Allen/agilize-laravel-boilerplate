@@ -5,6 +5,7 @@ namespace App\Packages\Prova\Controller;
 use App\Http\Controllers\Controller;
 use App\Packages\Prova\Models\Prova;
 use App\Packages\Prova\Repository\ProvaRepository;
+use App\Packages\Prova\Repository\SnapshotRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 class ProvaController extends Controller
 {
     protected ProvaRepository $provaRepository;
+    protected SnapshotRepository $snapshotRepository;
 
     /**
      * @param ProvaRepository $provaRepository
@@ -40,7 +42,7 @@ class ProvaController extends Controller
     public function store(Request $request):JsonResponse
     {
         try{
-           $snapshot = $this->snapshotService->create($exam);
+            $snapshot = $this->snapshotRepository->add();
             $aluno = $request->get('aluno');
             $tema = $request->get('tema');
             $questao = $request->get('quantidade_questao');

@@ -23,7 +23,7 @@ class ProvaSeeder extends Seeder
       $aluno = $this->prova->getAluno();
       $tema =  $this->prova->getTema();
       $questao =  $this->prova->getQuestao();
-      EntityManager::persist(new Prova($aluno,$tema,$questao));
+      EntityManager::persist(new Prova($aluno,$tema, (int)$questao));
 
       EntityManager::flush();
     }

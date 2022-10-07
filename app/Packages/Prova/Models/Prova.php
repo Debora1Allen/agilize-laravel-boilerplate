@@ -57,6 +57,15 @@ class Prova
      */
     protected int $nota;
 
+    /**
+     * @var
+     */
+    protected $createdAt;
+
+    /**
+     * @var
+     */
+    protected $updatedAt;
 
     /**
      * @param Aluno $aluno
