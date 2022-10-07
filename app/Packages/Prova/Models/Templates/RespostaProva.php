@@ -24,7 +24,7 @@ class RespostaProva
     protected string $id;
 
     /**
-     * @var string
+     * @ORM\Column(type="string")
      */
     protected string $texto;
 
@@ -32,10 +32,31 @@ class RespostaProva
      * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Templates\QuestaoProva", inversedBy="resposta_prova")
      */
     protected QuestaoProva $questaoProva;
+
     /**
-     * @var bool
+     * @ORM\Column(type="boolean")
      */
     protected bool $escolhida;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected bool $correta;
+
+    /**
+     * @param string $id
+     * @param string $texto
+     * @param QuestaoProva $questaoProva
+     * @param bool $escolhida
+     */
+    public function __construct(string $id, string $texto, QuestaoProva $questaoProva, bool $escolhida, bool $correta)
+    {
+        $this->id = $id;
+        $this->texto = $texto;
+        $this->questaoProva = $questaoProva;
+        $this->escolhida = $escolhida;
+        $this->correta = $correta;
+    }
 
     /**
      * @return string
@@ -70,16 +91,20 @@ class RespostaProva
     }
 
     /**
-     * @param string $id
-     * @param string $texto
-     * @param QuestaoProva $questaoProva
+     * @return bool
+     */
+    public function isCorreta(): bool
+    {
+        return $this->correta;
+    }
+
+    /**
      * @param bool $escolhida
      */
-    public function __construct(string $id, string $texto, QuestaoProva $questaoProva, bool $escolhida)
+    public function setEscolhida(bool $escolhida): void
     {
-        $this->id = $id;
-        $this->texto = $texto;
-        $this->questaoProva = $questaoProva;
         $this->escolhida = $escolhida;
     }
+
+
 }

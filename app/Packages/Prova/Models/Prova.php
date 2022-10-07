@@ -65,7 +65,7 @@ class Prova
      */
     public function __construct(Aluno $aluno, Tema $tema, int $quantidadeQuestoes)
     {
-        $this->id = Str::uuid()->toString();;
+        $this->id = Str::uuid()->toString();
         $this->aluno = $aluno;
         $this->tema = $tema;
         $this->quantidadeQuestoes = $quantidadeQuestoes;
