@@ -2,8 +2,10 @@
 
 namespace App\Packages\Prova\Models;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Illuminate\Support\Str;
+use Doctrine\Common\Collections\Collection;
 
 
 /**
@@ -28,7 +30,7 @@ class Questao
     /**
      * @ORM\OneToMany(targetEntity="\AppPackages\Prova\Models\Resposta.php", mappedBy="questoes", cascade="resposta")
      */
-    protected Resposta $resposta;
+    protected Collection $resposta;
 
     /**
      * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Tema", inversedBy="tema", cascade="persist")
@@ -45,6 +47,7 @@ class Questao
         $this->id = Str::uuid()->toString();
         $this->texto = $texto;
         $this->tema = $tema;
+        $this->resposta = new ArrayCollection();
 
     }
 
@@ -71,4 +74,6 @@ class Questao
     {
         return $this->tema;
     }
+
+
 }
