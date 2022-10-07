@@ -7,6 +7,7 @@ use App\Packages\Prova\Models\Questao;
 use App\Packages\Prova\Models\Tema;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Illuminate\Support\Str;
 
 class QuestaoProva
 
@@ -31,10 +32,29 @@ class QuestaoProva
     protected Prova $prova;
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
     protected string $texto;
+
+    /**
+
+     * @ORM\Column(type="integer")
+     */
+    protected int $pesoQuestao;
+
+    /**
+     * @param string $id
+     * @param Prova $prova
+     * @param string $texto
+     * @param int $pesoQuestao
+     */
+    public function __construct( Prova $prova, string $texto, int $pesoQuestao)
+    {
+        $this->id = Str::uuid()->toString();
+        $this->prova = $prova;
+        $this->texto = $texto;
+        $this->pesoQuestao = $pesoQuestao;
+    }
 
     /**
      * @return string
@@ -61,29 +81,12 @@ class QuestaoProva
     }
 
     /**
-     * @return Tema
+     * @return int
      */
-    public function getTema(): Tema
+    public function getPesoQuestao(): int
     {
-        return $this->tema;
+        return $this->pesoQuestao;
     }
 
-    /**
-     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Tema", inversedBy="questao_prova")
-     */
-    protected Tema $tema;
 
-    /**
-     * @param string $id
-     * @param Prova $prova
-     * @param string $texto
-     * @param Tema $tema
-     */
-    public function __construct(string $id, Prova $prova, string $texto, Tema $tema)
-    {
-        $this->id = $id;
-        $this->prova = $prova;
-        $this->texto = $texto;
-        $this->tema = $tema;
-    }
 }
