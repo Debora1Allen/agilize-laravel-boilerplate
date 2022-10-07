@@ -40,6 +40,7 @@ class ProvaController extends Controller
     public function store(Request $request):JsonResponse
     {
         try{
+           $snapshot = $this->snapshotService->create($exam);
             $aluno = $request->get('aluno');
             $tema = $request->get('tema');
             $questao = $request->get('quantidade_questao');
@@ -65,26 +66,8 @@ class ProvaController extends Controller
         }
     }
 
-    public function calculaResultado()
-    {
 
-    }
 
-    public function finalizaProva(Prova $prova, $nota, $dataFinalizacao)
-    {
-        $entityManager = $this->getEntityManager();
-        $queryBuilder = $entityManager->createQueryBuilder();
-        return $queryBuilder
-            ->set('exam.score', ':score')
-            ->set('exam.finished_at', ':finishedAt')
-            ->where('exam = :exam')
-            ->setParameters([
-                'prova' => $prova,
-                'nota' => $nota,
-                'data_finalizacao' => $dataFinalizacao,
-            ])
-            ->getQuery()
-            ->execute();
-    }
+
 
 }
