@@ -2,6 +2,7 @@
 
 namespace App\Packages\Prova\Repository;
 
+use App\Packages\Aluno\Models\Aluno;
 use App\Packages\Base\Repository\AbstractRepository;
 use App\Packages\Prova\Models\Questao;
 use App\Packages\Prova\Models\Resposta;
@@ -14,5 +15,10 @@ class TemaRepository extends AbstractRepository
         $this->getEntityManager()->persist($tema);
         $this->getEntityManager()->flush();
         return $tema;
+    }
+
+    public function findOneTemaById(string $id): ?Tema
+    {
+        return $this->findOneBy(['id' => $id]);
     }
 }

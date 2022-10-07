@@ -42,7 +42,7 @@ class ProvaController extends Controller
         try{
             $aluno = $request->get('aluno');
             $tema = $request->get('tema');
-            $questao = $request->get('questao');
+            $questao = $request->get('quantidade_questao');
             return response()->json($this->provaRepository->add(new Prova($aluno,$tema,$questao)), 201);
 
         }catch (Exception $exception){
@@ -51,10 +51,40 @@ class ProvaController extends Controller
     }
 
 
-    public function update()
+    public function update(Request $request, $prova): JsonResponse
+    {
+        try{
+            $result = $this->provaRepository->update($prova,
+                $request->get('resposta'),
+                $request->get('data_finalizacao'),
+            );
+
+            return response()->json($this->provaRepository->upadate($result), 200);
+        }catch (\Exception $exception){
+            throw new Exception($exception->getMessage(), 1665091042);
+        }
+    }
+
+    public function calculaResultado()
     {
 
     }
 
+    public function finalizaProva(Prova $prova, $nota, $dataFinalizacao)
+    {
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        return $queryBuilder
+            ->set('exam.score', ':score')
+            ->set('exam.finished_at', ':finishedAt')
+            ->where('exam = :exam')
+            ->setParameters([
+                'prova' => $prova,
+                'nota' => $nota,
+                'data_finalizacao' => $dataFinalizacao,
+            ])
+            ->getQuery()
+            ->execute();
+    }
 
 }

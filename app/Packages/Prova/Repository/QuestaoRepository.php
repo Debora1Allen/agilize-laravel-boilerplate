@@ -23,4 +23,19 @@ class QuestaoRepository extends AbstractRepository
     {
       return $this->tema->getNome();
     }
+
+    public function randonQuestao($tema, $quantidadeQuestoes)
+    {
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        return $queryBuilder
+            ->select('questao')
+            ->from($this->entityName, 'questao')
+            ->where('questao.tema = :questao')
+            ->setParameter('questao', $tema)
+            ->orderBy('RANDOM()')
+            ->setMaxResults($quantidadeQuestoes)
+            ->getQuery()
+            ->getResult();
+    }
 }

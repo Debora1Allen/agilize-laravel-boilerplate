@@ -16,8 +16,14 @@ class ProvaRepository extends AbstractRepository
         return $prova;
     }
 
+    public function upadate()
+    {
+        
+    }
     public function findOneProvaById(string $id): ?Prova
     {
         return $this->findOneBy(['id' => $id]);
     }
+
+
 }
