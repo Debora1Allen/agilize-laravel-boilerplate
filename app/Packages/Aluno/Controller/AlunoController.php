@@ -35,6 +35,7 @@ class AlunoController extends Controller
                 $alunosArray->add([
                     'id' => $aluno->getId(),
                     'telefone' => $aluno->getTelefone(),
+                    'email' => $aluno->getEmail(),
                 ]);
             }
             return response()->json($alunosArray->toArray());
@@ -52,7 +53,8 @@ class AlunoController extends Controller
         try{
             $nome = $request->get('nome');
             $telefone = $request->get('telefone');
-            return response()->json($this->alunoRepository->add(new Aluno($nome,$telefone)), 201);
+            $email = $request->get('email');
+            return response()->json($this->alunoRepository->add(new Aluno($nome,$telefone, $email)), 201);
         }catch (Exception $exception){
             throw new Exception($exception->getMessage(), 1664303115);
         }

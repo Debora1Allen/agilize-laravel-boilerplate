@@ -29,21 +29,27 @@ class Aluno
      */
     protected string $nome;
 
-//    /**
-//     *  @ORM\OneToMany(targetEntity="\App\Packages\Prova\Models\Prova", mappedBy="aluno")
-//     */
-//    protected Collection $prova;
-
     /**
      * @ORM\Column(type="integer")
      */
     protected int $telefone;
 
-    public function __construct(string $nome, int $telefone)
+    /**
+     * @var string
+     */
+    protected string $email;
+
+    /**
+     * @param string $nome
+     * @param int $telefone
+     * @param string $email
+     */
+    public function __construct(string $nome, int $telefone, string $email)
     {
         $this->id = Str::uuid()->toString();
         $this->nome = $nome;
         $this->telefone = $telefone;
+        $this->email = $email;
     }
 
     /**
@@ -68,5 +74,13 @@ class Aluno
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
     }
 }

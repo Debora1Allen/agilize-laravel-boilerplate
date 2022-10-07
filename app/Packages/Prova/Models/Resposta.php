@@ -32,7 +32,7 @@ class Resposta
     protected bool $correta;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Questao", inversedBy="resposta")
+     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Questao", inversedBy="resposta", cascade="persist")
      */
     protected Questao $questao;
 

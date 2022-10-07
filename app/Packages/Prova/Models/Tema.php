@@ -29,9 +29,9 @@ class Tema
     protected string $nome;
 
     /**
-     *  @ORM\OneToMany(targetEntity="\App\Packages\Prova\Models\Prova", mappedBy="tema")
+     *  @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Questao", mappedBy="tema", cascade="persist")
      */
-    protected Collection $prova;
+    protected Collection $questoes;
 
     /**
      * @param string $nome

@@ -4,6 +4,7 @@ namespace App\Packages\Prova\Models;
 
 use App\Packages\Aluno\Models\Aluno;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Illuminate\Support\Str;
 use mysql_xdevapi\Collection;
 
@@ -13,6 +14,9 @@ use mysql_xdevapi\Collection;
  */
 class Prova
 {
+
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="guid")
