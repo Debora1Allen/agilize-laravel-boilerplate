@@ -22,18 +22,18 @@ class Prova
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="\App\Packages\Aluno\Models\Aluno", inversedBy="prova")
+     * @ORM\ManyToOne(targetEntity="\App\Packages\Aluno\Models\Aluno", inversedBy="aluno")
      */
     protected Aluno $aluno;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Tema", inversedBy="prova")
+     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Tema", inversedBy="tema", cascade="persist")
      */
     protected Tema $tema;
 
 
     /**
-     *  @ORM\OneToMany(targetEntity="\App\Packages\Prova\Models\Questao", mappedBy="prova", cascade="persist")
+     *  @ORM\OneToMany(targetEntity="\App\Packages\Prova\Models\Resposta", mappedBy="questoes", cascade="persist")
      */
     protected Collection $questao;
 
@@ -52,22 +52,6 @@ class Prova
      * @ORM\Column(type="integer", nullable= "true")
      */
     protected int $nota;
-
-    /**
-     * @return int
-     */
-    public function getQuantidadeQuestoes(): int
-    {
-        return $this->quantidadeQuestoes;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNota(): int
-    {
-        return $this->nota;
-    }
 
 
     /**
@@ -113,6 +97,30 @@ class Prova
     public function getQuestao(): Collection
     {
         return $this->questao;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantidadeQuestoes(): int
+    {
+        return $this->quantidadeQuestoes;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNota(): int
+    {
+        return $this->nota;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDataFinalizacao(): \DateTime
+    {
+        return $this->dataFinalizacao;
     }
 
 }

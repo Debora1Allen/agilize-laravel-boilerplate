@@ -4,7 +4,7 @@ namespace App\Packages\Prova\Models;
 
 use Doctrine\ORM\Mapping as ORM;
 use Illuminate\Support\Str;
-use mysql_xdevapi\Collection;
+
 
 /**
  * @ORM\Entity
@@ -26,9 +26,27 @@ class Questao
     protected string $texto;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Tema", inversedBy="questao")
+     * @ORM\OneToMany(targetEntity="\AppPackages\Prova\Models\Resposta.php", mappedBy="questoes", cascade="resposta")
+     */
+    protected Resposta $resposta;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Tema", inversedBy="tema", cascade="persist")
      */
     protected Tema $tema;
+
+
+    /**
+     * @param string $texto
+     * @param Tema $tema ;
+     */
+    public function __construct(string $texto, Tema $tema)
+    {
+        $this->id = Str::uuid()->toString();
+        $this->texto = $texto;
+        $this->tema = $tema;
+
+    }
 
     /**
      * @return string
@@ -52,18 +70,5 @@ class Questao
     public function getTema(): Tema
     {
         return $this->tema;
-    }
-
-
-    /**
-     * @param string $texto
-     * @param Tema $tema;
-     */
-    public function __construct(string $texto,Tema $tema)
-    {
-        $this->id = Str::uuid()->toString();
-        $this->texto = $texto;
-        $this->tema = $tema;
-
     }
 }
