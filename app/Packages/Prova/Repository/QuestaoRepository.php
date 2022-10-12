@@ -10,7 +10,7 @@ use App\Packages\Prova\Models\Tema;
 class QuestaoRepository extends AbstractRepository
 {
 
-    protected Tema $tema;
+public string $entityName = Questao::class;
 
     public function add(Questao $questao): Questao
     {
@@ -19,23 +19,8 @@ class QuestaoRepository extends AbstractRepository
         return $questao;
     }
 
-    public function findTema()
+    public function findOneTemaById(string $id): ?Tema
     {
-      return $this->tema->getNome();
-    }
-
-    public function randonQuestao($tema, $quantidadeQuestoes)
-    {
-        $entityManager = $this->getEntityManager();
-        $queryBuilder = $entityManager->createQueryBuilder();
-        return $queryBuilder
-            ->select('questao')
-            ->from($this->entityName, 'questao')
-            ->where('questao.tema = :questao')
-            ->setParameter('questao', $tema)
-            ->orderBy('RANDOM()')
-            ->setMaxResults($quantidadeQuestoes)
-            ->getQuery()
-            ->getResult();
+        return $this->findOneBy(['id' => $id]);
     }
 }

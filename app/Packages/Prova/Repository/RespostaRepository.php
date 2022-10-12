@@ -9,6 +9,8 @@ use App\Packages\Prova\Models\Tema;
 
 class RespostaRepository extends AbstractRepository
 {
+    public string $entityName = Resposta::class;
+
     public function add(Resposta $resposta): Resposta
     {
         $this->getEntityManager()->persist($resposta);

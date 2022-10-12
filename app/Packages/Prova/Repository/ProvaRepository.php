@@ -9,6 +9,8 @@ use App\Packages\Prova\Models\Prova;
 class ProvaRepository extends AbstractRepository
 {
 
+    public string $entityName = Prova::class;
+
     public function add(Prova $prova):Prova
     {
         $this->getEntityManager()->persist($prova);
@@ -30,9 +32,9 @@ class ProvaRepository extends AbstractRepository
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();
         return $queryBuilder
-            ->set('exam.score', ':score')
-            ->set('exam.finished_at', ':finishedAt')
-            ->where('exam = :exam')
+            ->set('prova.nota', ':nota')
+            ->set('prova.data_finalizada', ':data_finalizada')
+            ->where('prova = :prova')
             ->setParameters([
                 'prova' => $prova,
                 'nota' => $nota,

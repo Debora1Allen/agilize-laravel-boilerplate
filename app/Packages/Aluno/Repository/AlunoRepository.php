@@ -27,4 +27,8 @@ class AlunoRepository extends AbstractRepository
     {
         return $this->findOneBy(['id' => $id]);
     }
+    public function findOneAlunoByNome(string $nome): ?Aluno
+    {
+        return $this->findOneBy(['nome' => $nome]);
+    }
 }
