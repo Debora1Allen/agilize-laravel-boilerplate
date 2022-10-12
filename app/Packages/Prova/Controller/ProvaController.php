@@ -16,80 +16,48 @@ use function PHPUnit\Framework\assertDoesNotMatchRegularExpression;
 
 class ProvaController extends Controller
 {
-    protected ProvaRepository $provaRepository;
-    protected AlunoRepository $alunoRepository;
-    protected  TemaRepository $temaRepository;
-    protected Prova $prova;
-
-    /**
-     * @param ProvaRepository $provaRepository
-     */
-    public function __construct(ProvaRepository $provaRepository, AlunoRepository $alunoRepository,TemaRepository $temaRepository)
+    public function __construct(private ProvaRepository $provaRepository, private ProvaFacade $provaFacade)
     {
-        $this->provaRepository = $provaRepository;
-        $this->alunoRepository = $alunoRepository;
-        $this->temaRepository = $temaRepository;
     }
 
-
-    public function show(Request $request)
+    public function index()
     {
-        try{
-            $idProva = $request->get('id');
-            $prova = $this->provaRepository->findOneProvaById($idProva);
-            return response()->json($prova);
-
-        }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1665091313);
+        try {
+            $provas = $this->provaFacade->getAll();
+            return response()->json(['data' => ProvaResponse::collection($provas)], HttpStatusConstants::OK);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
         }
     }
 
-    /**
-     * @throws Exception
-     */
-    public function store(Request $request)
+    public function show(Prova $prova)
     {
-        try{
-            $aluno = $this->getAluno($request);
-            $tema = $this->getTema($request);
-            $questao = $this->getQuantidadeQuestoes();
-            return $this->provaRepository->add(new Prova($aluno,$tema,$questao));
-
-        }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1665091042);
+        try {
+            return response()->json(['data' => ProvaResponse::item($prova)], HttpStatusConstants::OK);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
         }
     }
 
-
-    public function update(Request $request, $prova): JsonResponse
+    public function store(Aluno $aluno, ProvaRequest $request)
     {
-        try{
-            $result = $this->provaRepository->update($prova,
-                $request->get('resposta'),
-                $request->get('data_finalizacao'),
-            );
-
-            return response()->json($this->provaRepository->upadate($result), 200);
-        }catch (\Exception $exception){
-            throw new Exception($exception->getMessage(), 1665091042);
+        try {
+            $prova = $this->provaFacade->create($aluno, $request->get('tema'));
+            $this->provaRepository->flush();
+            return response()->json(['data' => ProvaResponse::item($prova)], HttpStatusConstants::CREATED);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
         }
     }
 
-
-    public function getAluno(Request $request)
+    public function enviarRepostas(Prova $prova, EnviarProvaRequest $request)
     {
-         $nome = $request->get('nome');
-        return $this->alunoRepository->findOneAlunoByNome($nome);
-    }
-
-    public function getTema(Request $request)
-    {
-         $nome = $request->get('nome');
-        return $this->temaRepository->findOneTemaByNome($nome);
-    }
-
-    public function getQuantidadeQuestoes() : int
-    {
-        return rand(4,10);
+        try {
+            $prova = $this->provaFacade->responder($prova, $request->get('respostas'));
+            $this->provaRepository->flush();
+            return response()->json(['data' => ProvaResponse::item($prova)], HttpStatusConstants::CREATED);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+        }
     }
 }

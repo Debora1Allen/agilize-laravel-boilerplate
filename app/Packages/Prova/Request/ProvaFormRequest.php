@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Packages\Aluno\Request;
+namespace App\Packages\Prova\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AlunoFormRequest extends FormRequest
+class ProvaFormRequest extends FormRequest
 {
     public function rules()
     {
         return [
-            'nome' => 'string|required',
+            'tema' => 'required|string',
         ];
     }
-
 }
