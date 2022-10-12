@@ -42,7 +42,7 @@ class ProvaController extends Controller
     public function store(Request $request):JsonResponse
     {
         try{
-            $snapshot = $this->snapshotRepository->add();
+
             $aluno = $request->get('aluno');
             $tema = $request->get('tema');
             $questao = $request->get('quantidade_questao');
