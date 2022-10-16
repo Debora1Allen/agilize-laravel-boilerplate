@@ -2,109 +2,54 @@
 
 namespace App\Packages\Prova\Models\Templates;
 
-use App\Packages\Prova\Models\Questao;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 class RespostaProva
-
-    /**
-     * @ORM\Entity
-     * @ORM\Table(name="resposta_prova")
-     */
 {
+    public function __construct(
+        /**
+         * @ORM\Id
+         * @ORM\Column(type="uuid", unique=true)
+         * @ORM\GeneratedValue(strategy="CUSTOM")
+         * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+         */
+        private string  $id,
 
-    use TimestampableEntity;
+        /**
+         * @ORM\ManyToOne(
+         *     targetEntity="App\Packages\Prova\Domain\Model\QuestaoProva",
+         *     fetch="EXTRA_LAZY",
+         *     inversedBy="alternativas",
+         * )
+         */
+        private QuestaoProva $questao,
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(name="id", type="guid")
-     * @ORM\GeneratedValue(strategy="UUID")
-     */
-    protected string $id;
+        /** @ORM\Column(type="string") */
+        private string  $alternativa,
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected string $texto;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Templates\QuestaoProva", inversedBy="resposta_prova")
-     */
-    protected QuestaoProva $questaoProva;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    protected bool $escolhida;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    protected bool $correta;
-
-    /**
-     * @param string $id
-     * @param string $texto
-     * @param QuestaoProva $questaoProva
-     * @param bool $escolhida
-     */
-    public function __construct(string $id, string $texto, QuestaoProva $questaoProva, bool $escolhida, bool $correta)
+        /** @ORM\Column(type="boolean") */
+        private bool    $isCorreta,
+    )
     {
-        $this->id = $id;
-        $this->texto = $texto;
-        $this->questaoProva = $questaoProva;
-        $this->escolhida = $escolhida;
-        $this->correta = $correta;
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getTexto(): string
+    public function getQuestao(): QuestaoProva
     {
-        return $this->texto;
+        return $this->questao;
     }
 
-    /**
-     * @return QuestaoProva
-     */
-    public function getQuestaoProva(): QuestaoProva
+    public function getAlternativa(): string
     {
-        return $this->questaoProva;
+        return $this->alternativa;
     }
 
-    /**
-     * @return bool
-     */
-    public function isEscolhida(): bool
-    {
-        return $this->escolhida;
-    }
-
-    /**
-     * @return bool
-     */
     public function isCorreta(): bool
     {
-        return $this->correta;
+        return $this->isCorreta;
     }
-
-    /**
-     * @param bool $escolhida
-     */
-    public function setEscolhida(bool $escolhida): void
-    {
-        $this->escolhida = $escolhida;
-    }
-
-
 }

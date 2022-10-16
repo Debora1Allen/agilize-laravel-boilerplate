@@ -14,33 +14,48 @@ use Illuminate\Http\Request;
 class QuestaoController
 {
 
-    protected QuestaoRepository $questaoRepository;
-
-    /**
-     * @param QuestaoRepository $questaoRepository
-     */
-    public function __construct(QuestaoRepository $questaoRepository)
+    public function __construct(private QuestaoRepository $questaoRepository, private QuestaoFacade $questaoFacade)
     {
-        $this->questaoRepository = $questaoRepository;
     }
 
-
-    public function index(Request $request)
+    public function index()
     {
-
+        try {
+            $questoes = $this->questaoFacade->getAll();
+            return response()->json(['data' => QuestaoResponse::collection($questoes)], HttpStatusConstants::OK);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+        }
     }
 
-    /**
-     * @throws Exception
-     */
-    public function store(Request $request):JsonResponse
+    public function show(Questao $questao)
     {
-        try{
-           $texto = $request->get('texto');
-           $tema = $this->questaoRepository->findTema();
-            return response()->json($this->questaoRepository->add(new Questao($texto,$tema)), 201);
-        }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1665091019);
+        try {
+            return response()->json(['data' => QuestaoResponse::item($questao)], HttpStatusConstants::OK);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+        }
+    }
+
+    public function store(QuestaoRequest $request)
+    {
+        try {
+            $questao = $this->questaoFacade->create($request->get('temaSlugname'), $request->get('pergunta'));
+            $this->questaoRepository->flush();
+            return response()->json(['data' => QuestaoResponse::item($questao)], HttpStatusConstants::CREATED);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+        }
+    }
+
+    public function createAlternativas(Questao $questao, AlternativaRequest $request)
+    {
+        try {
+            $questao = $this->questaoFacade->addAlternativas($questao, $request->get('alternativas'));
+            $this->questaoRepository->flush();
+            return response()->json(['data' => QuestaoResponse::item($questao)], HttpStatusConstants::CREATED);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
         }
     }
 }

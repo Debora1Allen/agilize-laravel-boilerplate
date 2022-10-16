@@ -3,90 +3,89 @@
 namespace App\Packages\Prova\Models\Templates;
 
 use App\Packages\Prova\Models\Prova;
-use App\Packages\Prova\Models\Questao;
-use App\Packages\Prova\Models\Tema;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Illuminate\Support\Str;
 
 class QuestaoProva
-
-    /**
-     * @ORM\Entity
-     * @ORM\Table(name="questao_prova")
-     */
 {
     use TimestampableEntity;
 
     /**
-     * @ORM\Id
-     * @ORM\Column(name="id", type="guid")
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\OneToMany(targetEntity="AlternativaProva", fetch="EXTRA_LAZY", mappedBy="questao", cascade={"all"})
      */
-    protected string $id;
+    private ?Collection $alternativas;
 
+    /** @ORM\Column(type="string") */
+    private ?string $respostaCorreta;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Prova", inversedBy="questao_prova")
-     */
-    protected Prova $prova;
+    public function __construct(
+        /**
+         * @ORM\Id
+         * @ORM\Column(type="uuid", unique=true)
+         * @ORM\GeneratedValue(strategy="CUSTOM")
+         * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+         */
+        private string  $id,
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected string $texto;
+        /**
+         * @ORM\ManyToOne(
+         *     targetEntity="Prova",
+         *     inversedBy="questoes"
+         * )
+         */
+        private Prova $prova,
 
-    /**
+        /** @ORM\Column(type="string") */
+        private string  $pergunta,
 
-     * @ORM\Column(type="integer")
-     */
-    protected int $pesoQuestao;
-
-    /**
-     * @param string $id
-     * @param Prova $prova
-     * @param string $texto
-     * @param int $pesoQuestao
-     */
-    public function __construct( Prova $prova, string $texto, int $pesoQuestao)
+        /** @ORM\Column(type="string", nullable=true) */
+        private ?string $respostaAluno = null,
+    )
     {
-        $this->id = Str::uuid()->toString();
-        $this->prova = $prova;
-        $this->texto = $texto;
-        $this->pesoQuestao = $pesoQuestao;
+        $this->alternativas = new ArrayCollection;
+        $this->respostaCorreta = null;
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return Prova
-     */
-    public function getProva(): Prova
+    public function getPergunta(): string
     {
-        return $this->prova;
+        return $this->pergunta;
     }
 
-    /**
-     * @return string
-     */
-    public function getTexto(): string
+    public function getAlternativas(): ?Collection
     {
-        return $this->texto;
+        return $this->alternativas;
     }
 
-    /**
-     * @return int
-     */
-    public function getPesoQuestao(): int
+    public function setAlternativas($alternativas)
     {
-        return $this->pesoQuestao;
+        foreach ($alternativas as $alternativa) {
+            if ($alternativa->isCorreta()) {
+                $this->respostaCorreta = $alternativa->getAlternativa();
+            }
+            $this->alternativas->add(new RespostaProva(Str::uuid(), $this, $alternativa->getAlternativa(), $alternativa->isCorreta()));
+        }
     }
 
+    public function getRespostaAluno(): ?string
+    {
+        return $this->respostaAluno;
+    }
 
+    public function setRespostaAluno(string $respostaAluno): void
+    {
+        $this->respostaAluno = $respostaAluno;
+    }
+
+    public function getRespostaCorreta(): ?string
+    {
+        return $this->respostaCorreta;
+    }
 }

@@ -15,32 +15,28 @@ use Illuminate\Http\Request;
 
 class TemaController
 {
-    protected TemaRepository $temaRepository;
-
-    /**
-     * @param TemaRepository $temaRepository
-     */
-    public function __construct(TemaRepository $temaRepository)
+    public function __construct(private TemaRepository $temaRepository, private TemaFacade $temaFacade)
     {
-        $this->temaRepository = $temaRepository;
     }
 
-
-    public function index(Request $request)
+    public function index()
     {
-
+        try {
+            $temas = $this->temaFacade->getAll();
+            return response()->json(['data' => TemaResponse::collection($temas)], HttpStatusConstants::OK);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+        }
     }
 
-    /**
-     * @throws Exception
-     */
-    public function store(Request $request):JsonResponse
+    public function store(TemaRequest $request)
     {
-        try{
-           $nome = $request->get('nome');
-            return response()->json($this->temaRepository->add(new Tema($nome)));
-        }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1664303115);
+        try {
+            $tema = $this->temaFacade->create($request->get('nome'), $request->get('slugname'));
+            $this->temaRepository->flush();
+            return response()->json(['data' => TemaResponse::item($tema)], HttpStatusConstants::OK);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
         }
     }
 }

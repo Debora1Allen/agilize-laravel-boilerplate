@@ -7,6 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Illuminate\Support\Str;
 
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="alternativas")
+ */
 class Resposta
 {
     use TimestampableEntity;
@@ -18,56 +22,49 @@ class Resposta
      */
     protected string $id;
 
+        /**
+         * @ORM\ManyToOne(targetEntity="App\Packages\Questao\Domain\Model\Questao", inversedBy="alternativas")
+         */
+        private Questao $questao;
+
+        /** @ORM\Column(type="string") */
+        private string  $escolhida;
+
+        /** @ORM\Column(type="boolean") */
+        private bool    $isCorreta;
 
     /**
-     * @var string
-     * @ORM\Column(type="string")
+     * @param Questao $questao
+     * @param string $escolhida
+     * @param bool $isCorreta
      */
-    protected string $texto;
-
-    /**
-     * @var boolean
-     * @ORM\Column(type="boolean")
-     */
-    protected bool $correta;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Questao", inversedBy="resposta", cascade="persist")
-     */
-    protected Questao $questao;
-
-    /**
-     * @param string $texto
-     * @param bool $correta
-     */
-    public function __construct( string $texto, bool $correta)
+    public function __construct($questao, string $escolhida, bool $isCorreta)
     {
         $this->id = Str::uuid()->toString();
-        $this->texto = $texto;
-        $this->correta = $correta;
+        $this->questao = $questao;
+        $this->escolhida = $escolhida;
+        $this->isCorreta = $isCorreta;
     }
 
-    /**
-     * @return string
-     */
+
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getTexto(): string
+    public function getQuestao(): Questao
     {
-        return $this->texto;
+        return $this->questao;
     }
 
-    /**
-     * @return bool
-     */
+    public function getEscolhida(): string
+    {
+        return $this->escolhida;
+    }
+
     public function isCorreta(): bool
     {
-        return $this->correta;
+        return $this->isCorreta;
     }
+
 }

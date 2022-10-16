@@ -3,84 +3,57 @@
 namespace App\Packages\Aluno\Models;
 
 use App\Packages\Prova\Models\Prova;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="aluno")
+ * @ORM\Table(name="alunos")
  */
 class Aluno
 {
     use TimestampableEntity;
 
     /**
-     * @ORM\Id
-     * @ORM\Column(name="id", type="guid")
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Domain\Model\Prova" , mappedBy="aluno")
      */
-    protected string $id;
+    private Collection $provas;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected string $nome;
+    public function __construct(
+        /**
+         * @ORM\Id
+         * @ORM\Column(type="uuid", unique=true)
+         * @ORM\GeneratedValue(strategy="CUSTOM")
+         * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+         */
+        private string $id,
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected int $telefone;
-
-    /**
-     * @var string
-     */
-    protected string $email;
-
-    /**
-     * @param string $nome
-     * @param int $telefone
-     * @param string $email
-     */
-    public function __construct(string $nome, int $telefone, string $email)
+        /** @ORM\Column(type="string") */
+        private string $nome,
+    )
     {
-        $this->id = Str::uuid()->toString();
-        $this->nome = $nome;
-        $this->telefone = $telefone;
-        $this->email = $email;
+        $this->provas = new ArrayCollection;
     }
 
-    /**
-     * @return int
-     */
-    public function getTelefone(): int
-    {
-        return $this->telefone;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNome(): string
-    {
-        return $this->nome;
-    }
-
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmail(): string
+    public function getNome(): string
     {
-        return $this->email;
+        return $this->nome;
+    }
+
+    public function getProvas(): Collection
+    {
+        return $this->provas;
+    }
+
+    public function addProva(Prova $prova)
+    {
+        $this->provas->add($prova);
     }
 }

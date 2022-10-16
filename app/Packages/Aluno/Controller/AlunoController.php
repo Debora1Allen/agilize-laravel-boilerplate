@@ -2,10 +2,12 @@
 
 namespace App\Packages\Aluno\Controller;
 
+use App\Packages\Aluno\Facade\AlunoFacade;
 use App\Packages\Aluno\Models\Aluno;
 use App\Packages\Aluno\Repository\AlunoRepository;
 use App\Packages\Aluno\Request\AlunoFormRequest;
 use App\Packages\Aluno\Response\AlunoResponse;
+use App\Packages\Prova\Response\ProvaResponse;
 use Exception;
 
 class AlunoController
@@ -31,9 +33,9 @@ class AlunoController
         {
             $aluno = $this->alunoFacade->create($request->get('nome'));
             $this->alunoRepository->flush();
-            return response()->json(['data' => AlunoResponse::item($aluno)], HttpStatusConstants::CREATED);
-        } catch (\Exception $exception) {
-            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+            return response()->json(['data' => AlunoResponse::item($aluno)], 201);
+        }catch (Exception $exception){
+            throw new Exception($exception->getMessage(), 1665091293);
         }
     }
 
@@ -42,10 +44,10 @@ class AlunoController
     {
         try {
             $prova = $aluno->getProvas()->toArray();
-            return response()->json(['data' => ProvaResponse::collection($prova)], HttpStatusConstants::OK);
+            return response()->json(['data' => ProvaResponse::Collection($prova)], 200);
         }catch (Exception $exception){
             throw new Exception($exception->getMessage(), 1665091293);
         }
     }
-}
+
 }

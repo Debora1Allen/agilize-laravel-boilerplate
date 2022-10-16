@@ -3,19 +3,29 @@
 namespace App\Packages\Prova\Models;
 
 use App\Packages\Aluno\Models\Aluno;
+use App\Packages\Prova\Models\Templates\QuestaoProva;
+use App\Packages\Prova\RespostaProva;
+use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Illuminate\Support\Str;
-use mysql_xdevapi\Collection;
+
+
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="prova")
+ * @ORM\Table(name="provas")
  */
 class Prova
 {
-
     use TimestampableEntity;
+
+    /**
+     * @ORM\OneToMany (targetEntity="QuestaoProva", mappedBy="prova", cascade={"all"})
+     */
+    private Collection $questoes;
 
     /**
      * @ORM\Id
@@ -24,116 +34,108 @@ class Prova
      */
     protected string $id;
 
+        /**
+         * @ORM\ManyToOne(
+         *     targetEntity="App\Packages\Aluno\Domain\Model\Aluno",
+         *     inversedBy="provas"
+         * )
+         */
+        private Aluno $aluno;
+
+        /**
+         * @ORM\ManyToOne(
+         *     targetEntity="App\Packages\Tema\Domain\Model\Tema",
+         *     inversedBy="provas"
+         * )
+         */
+        private Tema $tema;
+
+        /** @ORM\Column(type="float", nullable=true) */
+        private ?float $nota = null;
+
+        /** @ORM\Column(type="datetime", nullable=true) */
+        private ?\DateTime $submetidaEm = null;
+
+        /** @ORM\Column(type="string", options={"default":"Aberta"}) */
+        private ?string $status = 'Aberta';
 
     /**
-     * @ORM\ManyToOne(targetEntity="\App\Packages\Aluno\Models\Aluno", inversedBy="aluno")
-     */
-    protected Aluno $aluno;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="\App\Packages\Prova\Models\Tema", inversedBy="tema", cascade="persist")
-     */
-    protected Tema $tema;
-
-
-    /**
-     *  @ORM\OneToMany(targetEntity="\App\Packages\Prova\Models\Resposta", mappedBy="questoes", cascade="persist")
-     */
-    protected Collection $questao;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected int $quantidadeQuestoes;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    protected \DateTime $dataFinalizacao;
-
-
-    /**
-     * @ORM\Column(type="integer", nullable= "true")
-     */
-    protected int $nota;
-
-    /**
-     * @var
-     */
-    protected $createdAt;
-
-    /**
-     * @var
-     */
-    protected $updatedAt;
-
-    /**
+     * @param Collection $questoes
+     * @param string $id
      * @param Aluno $aluno
      * @param Tema $tema
-     * @param int $quantidadeQuestoes
+     * @param float|null $nota
+     * @param \DateTime|null $submetidaEm
+     * @param string|null $status
      */
-    public function __construct(Aluno $aluno, Tema $tema, int $quantidadeQuestoes)
+    public function __construct(Collection $questoes, string $id, Aluno $aluno, Tema $tema, ?float $nota, ?\DateTime $submetidaEm, ?string $status)
     {
+        $this->questoes = new ArrayCollection;
         $this->id = Str::uuid()->toString();
         $this->aluno = $aluno;
         $this->tema = $tema;
-        $this->quantidadeQuestoes = $quantidadeQuestoes;
+        $this->nota = $nota;
+        $this->submetidaEm = $submetidaEm;
+        $this->status = $status;
     }
 
-    /**
-     * @return string
-     */
+    public function setQuestoes(array $questoesCollection)
+    {
+        foreach ($questoesCollection as $questao) {
+            /** @var Questao $questao */
+            $questaoProva = new QuestaoProva(Str::uuid(), $this, $questao->getPergunta());
+            $questaoProva->setAlternativas($questao->getAlternativas());
+            $this->questoes->add($questaoProva);
+        }
+    }
+
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return Aluno
-     */
-    public function getAluno(): Aluno
+    public function getNota(): ?float
     {
-        return $this->aluno;
+        return $this->nota;
     }
 
-    /**
-     * @return Tema
-     */
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function getSubmetidaEm(): ?\DateTime
+    {
+        return $this->submetidaEm;
+    }
+
+    public function getQuestoes(): Collection
+    {
+        return $this->questoes;
+    }
+
     public function getTema(): Tema
     {
         return $this->tema;
     }
 
-    /**
-     * @return Collection
-     */
-    public function getQuestao(): Collection
+    public function responder(Collection $respostas, QuestaoProva $questaoProva, RespostaProva $resposta, int &$questoesCorretas): int
     {
-        return $this->questao;
-    }
+        $this->submetidaEm = now();
+        $this->status = "Finalizada";
 
-    /**
-     * @return int
-     */
-    public function getQuantidadeQuestoes(): int
-    {
-        return $this->quantidadeQuestoes;
-    }
+        $questoesCorretas = 0;
+        $questoesProva = $this->questoes;
 
-    /**
-     * @return int
-     */
-    public function getNota(): int
-    {
-        return $this->nota;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getDataFinalizacao(): \DateTime
-    {
-        return $this->dataFinalizacao;
+        foreach ($questoesProva as $key => $questaoProva) {
+            /** @var QuestaoProva $questaoProva */
+            $questaoProva->setRespostaAluno($respostas[$key]->getRespostaAluno());
+            if ($questaoProva->getRespostaCorreta() === $resposta->getRespostaAluno()) {
+                $questoesCorretas += 1;
+            }
+        }
+        $this->nota = round($questoesCorretas * (10 / $this->questoes->count()), 1);
+        return $questoesCorretas;
     }
 
 }
