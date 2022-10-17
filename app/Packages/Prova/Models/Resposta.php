@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="alternativas")
+ * @ORM\Table(name="repostas")
  */
 class Resposta
 {
@@ -23,29 +23,33 @@ class Resposta
     protected string $id;
 
         /**
-         * @ORM\ManyToOne(targetEntity="App\Packages\Questao\Domain\Model\Questao", inversedBy="alternativas")
+         * @ORM\ManyToOne(
+         *     targetEntity="App\Packages\Prova\Models\Questao",
+         *     fetch="EXTRA_LAZY",
+         *     inversedBy="alternativas",
+         * )
          */
         private Questao $questao;
 
         /** @ORM\Column(type="string") */
-        private string  $escolhida;
+        private string $resposta;
 
         /** @ORM\Column(type="boolean") */
-        private bool    $isCorreta;
+        private bool $isCorreta;
 
-    /**
-     * @param Questao $questao
-     * @param string $escolhida
-     * @param bool $isCorreta
-     */
-    public function __construct($questao, string $escolhida, bool $isCorreta)
-    {
-        $this->id = Str::uuid()->toString();
-        $this->questao = $questao;
-        $this->escolhida = $escolhida;
-        $this->isCorreta = $isCorreta;
-    }
-
+        /**
+         * @param string $id
+         * @param Questao $questao
+         * @param string $resposta
+         * @param bool $isCorreta
+         */
+        public function __construct(Questao $questao, string $resposta, bool $isCorreta)
+        {
+            $this->id = Str::uuid();
+            $this->questao = $questao;
+            $this->resposta = $resposta;
+            $this->isCorreta = $isCorreta;
+        }
 
     public function getId(): string
     {
@@ -57,14 +61,15 @@ class Resposta
         return $this->questao;
     }
 
-    public function getEscolhida(): string
+    public function getAlternativa(): string
     {
-        return $this->escolhida;
+        return $this->resposta;
     }
 
     public function isCorreta(): bool
     {
         return $this->isCorreta;
     }
+
 
 }

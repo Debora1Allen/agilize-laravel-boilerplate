@@ -2,7 +2,7 @@
 
 namespace App\Packages\Prova;
 
-class RespostaProva
+class RespostasProvaDto
 {
     public function __construct(private string $questaoId, private string $respostaAluno)
     {
@@ -17,5 +17,4 @@ class RespostaProva
     {
         return $this->respostaAluno;
     }
-
 }

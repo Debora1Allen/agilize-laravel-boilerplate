@@ -7,6 +7,7 @@ use App\Packages\Prova\Models\Resposta;
 use App\Packages\Prova\Models\Tema;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class TemaSeeder extends Seeder
@@ -23,7 +24,8 @@ class TemaSeeder extends Seeder
     public function run()
     {
       $nome = $this->tema->getNome();
-      EntityManager::persist(new Tema($nome));
+      $slugname = $this->tema->getSlugname();
+      EntityManager::persist(new Tema(Str::uuid(),$nome, $slugname));
       EntityManager::flush();
     }
 }

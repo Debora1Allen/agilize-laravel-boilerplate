@@ -9,45 +9,61 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Illuminate\Support\Str;
 
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="questoes_prova")
+ */
 class QuestaoProva
 {
     use TimestampableEntity;
 
     /**
-     * @ORM\OneToMany(targetEntity="AlternativaProva", fetch="EXTRA_LAZY", mappedBy="questao", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Templates\RespostaProva", fetch="EXTRA_LAZY", mappedBy="questao", cascade={"all"})
      */
-    private ?Collection $alternativas;
+    private ?Collection $repostas;
 
     /** @ORM\Column(type="string") */
     private ?string $respostaCorreta;
 
-    public function __construct(
-        /**
-         * @ORM\Id
-         * @ORM\Column(type="uuid", unique=true)
-         * @ORM\GeneratedValue(strategy="CUSTOM")
-         * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
-         */
-        private string  $id,
+    /**
+     * @ORM\Id
+     * @ORM\Column(name="id", type="guid")
+     * @ORM\GeneratedValue(strategy="UUID")
+     */
+    protected string $id;
 
-        /**
-         * @ORM\ManyToOne(
-         *     targetEntity="Prova",
-         *     inversedBy="questoes"
-         * )
-         */
-        private Prova $prova,
+    /**
+     * @ORM\ManyToOne(
+     *     targetEntity="App\Packages\Prova\Models\Prova",
+     *     inversedBy="questoes"
+     * )
+     */
+    private Prova $prova;
 
-        /** @ORM\Column(type="string") */
-        private string  $pergunta,
+    /** @ORM\Column(type="string") */
+    private string $pergunta;
 
-        /** @ORM\Column(type="string", nullable=true) */
-        private ?string $respostaAluno = null,
-    )
+    /** @ORM\Column(type="string", nullable=true) */
+    private ?string $respostaAluno = null;
+
+
+    /**
+     * @param string $id
+     * @param Prova $prova
+     * @param string $pergunta
+     * @param string|null $respostaAluno
+     */
+
+    public function __construct(Prova $prova, string $pergunta)
     {
-        $this->alternativas = new ArrayCollection;
+        $this->id = Str::uuid();
+        $this->repostas = new ArrayCollection;
         $this->respostaCorreta = null;
+        $this->prova = $prova;
+        $this->pergunta = $pergunta;
+        $this->respostaAluno = null;
     }
+
 
     public function getId(): string
     {
@@ -59,9 +75,9 @@ class QuestaoProva
         return $this->pergunta;
     }
 
-    public function getAlternativas(): ?Collection
+    public function getRepostas(): ?Collection
     {
-        return $this->alternativas;
+        return $this->repostas;
     }
 
     public function setAlternativas($alternativas)
@@ -70,7 +86,7 @@ class QuestaoProva
             if ($alternativa->isCorreta()) {
                 $this->respostaCorreta = $alternativa->getAlternativa();
             }
-            $this->alternativas->add(new RespostaProva(Str::uuid(), $this, $alternativa->getAlternativa(), $alternativa->isCorreta()));
+            $this->repostas->add(new RespostaProva($this, $alternativa->getAlternativa(), $alternativa->isCorreta()));
         }
     }
 

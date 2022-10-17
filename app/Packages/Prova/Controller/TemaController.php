@@ -2,6 +2,7 @@
 
 namespace App\Packages\Prova\Controller;
 
+use App\Http\Controllers\Controller;
 use App\Packages\Prova\Models\Prova;
 use App\Packages\Prova\Models\Resposta;
 use App\Packages\Prova\Models\Tema;
@@ -13,7 +14,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class TemaController
+class TemaController extends Controller
 {
     public function __construct(private TemaRepository $temaRepository, private TemaFacade $temaFacade)
     {

@@ -2,11 +2,17 @@
 
 namespace App\Packages\Prova\Facade;
 
+
+use App\Packages\Aluno\Models\Aluno;
+use App\Packages\Prova\Models\Prova;
+use App\Packages\Prova\Repository\ProvaRepository;
+use App\Packages\Prova\Service\ProvaService;
+
 class ProvaFacade
 {
-public function __construct(private ProvaRepository $provaRepository, private ProvaService $provaService)
-{
-}
+    public function __construct(private ProvaRepository $provaRepository, private ProvaService $provaService)
+    {
+    }
 
     public function create(Aluno $aluno, string $tema): Prova
     {
@@ -27,3 +33,4 @@ public function __construct(private ProvaRepository $provaRepository, private Pr
         return $this->provaRepository->findAll();
     }
 }
+

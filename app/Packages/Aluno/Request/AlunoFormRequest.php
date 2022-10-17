@@ -13,4 +13,11 @@ class AlunoFormRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'nome.string'=> 'O nome precisa ser uma string',
+            'nome.required' => 'O campo nome é obrigatório'
+        ];
+    }
 }

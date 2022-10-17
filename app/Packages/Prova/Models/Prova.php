@@ -4,7 +4,7 @@ namespace App\Packages\Prova\Models;
 
 use App\Packages\Aluno\Models\Aluno;
 use App\Packages\Prova\Models\Templates\QuestaoProva;
-use App\Packages\Prova\RespostaProva;
+use App\Packages\Prova\RespostasProvaDto;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,8 +22,14 @@ class Prova
 {
     use TimestampableEntity;
 
+    const NOTA_MAXIMA = 10.0;
+    const CONCLUIDA = 'Concluida';
+    const ABERTA = 'Aberta';
+    const HORA_EM_SEGUNDOS = 3600;
+
     /**
-     * @ORM\OneToMany (targetEntity="QuestaoProva", mappedBy="prova", cascade={"all"})
+     * @ORM\OneToMany (targetEntity="App\Packages\Prova\Models\Templates\QuestaoProva", mappedBy="prova", cascade={"all"})
+     * @ORM\OrderBy({"id" = "ASC"})
      */
     private Collection $questoes;
 
@@ -36,7 +42,7 @@ class Prova
 
         /**
          * @ORM\ManyToOne(
-         *     targetEntity="App\Packages\Aluno\Domain\Model\Aluno",
+         *     targetEntity="App\Packages\Aluno\Models\Aluno",
          *     inversedBy="provas"
          * )
          */
@@ -44,7 +50,7 @@ class Prova
 
         /**
          * @ORM\ManyToOne(
-         *     targetEntity="App\Packages\Tema\Domain\Model\Tema",
+         *     targetEntity="App\Packages\Prova\Models\Tema",
          *     inversedBy="provas"
          * )
          */
@@ -68,10 +74,10 @@ class Prova
      * @param \DateTime|null $submetidaEm
      * @param string|null $status
      */
-    public function __construct(Collection $questoes, string $id, Aluno $aluno, Tema $tema, ?float $nota, ?\DateTime $submetidaEm, ?string $status)
+    public function __construct( Aluno $aluno, Tema $tema, ?float $nota, ?\DateTime $submetidaEm, ?string $status)
     {
         $this->questoes = new ArrayCollection;
-        $this->id = Str::uuid()->toString();
+        $this->id = Str::uuid();
         $this->aluno = $aluno;
         $this->tema = $tema;
         $this->nota = $nota;
@@ -79,11 +85,12 @@ class Prova
         $this->status = $status;
     }
 
+
     public function setQuestoes(array $questoesCollection)
     {
         foreach ($questoesCollection as $questao) {
             /** @var Questao $questao */
-            $questaoProva = new QuestaoProva(Str::uuid(), $this, $questao->getPergunta());
+            $questaoProva = new QuestaoProva($this, $questao->getPergunta());
             $questaoProva->setAlternativas($questao->getAlternativas());
             $this->questoes->add($questaoProva);
         }
@@ -119,23 +126,50 @@ class Prova
         return $this->tema;
     }
 
-    public function responder(Collection $respostas, QuestaoProva $questaoProva, RespostaProva $resposta, int &$questoesCorretas): int
+    public function responder(\Illuminate\Support\Collection  $respostas): void
     {
         $this->submetidaEm = now();
-        $this->status = "Finalizada";
+        $this->status = self::CONCLUIDA;
+
+        $this->throwExceptionIfProvaForaDoPrazo();
 
         $questoesCorretas = 0;
+        $questoesCorretas = $this->verificaESetaRespostasCorretasDoAluno($respostas, $questoesCorretas);
+
+        $this->calculaNotaProva($questoesCorretas);
+    }
+
+    private function throwExceptionIfProvaForaDoPrazo(): void
+    {
+        $submetidaEm = Carbon::instance($this->submetidaEm);
+        if ($submetidaEm->diffInSeconds($this->createdAt) > self::HORA_EM_SEGUNDOS) {
+            $this->nota = 0;
+            throw new \Exception('Prova enviada fora do tempo limite.', 1663470013);
+        }
+    }
+
+    private function verificaESetaRespostasCorretasDoAluno(Collection $respostas, int $questoesCorretas): int
+    {
         $questoesProva = $this->questoes;
 
         foreach ($questoesProva as $key => $questaoProva) {
             /** @var QuestaoProva $questaoProva */
             $questaoProva->setRespostaAluno($respostas[$key]->getRespostaAluno());
-            if ($questaoProva->getRespostaCorreta() === $resposta->getRespostaAluno()) {
-                $questoesCorretas += 1;
-            }
+            $this->somaSeRespostaAlunoForCorreta($questaoProva, $respostas[$key], $questoesCorretas);
         }
-        $this->nota = round($questoesCorretas * (10 / $this->questoes->count()), 1);
+
         return $questoesCorretas;
     }
 
+    private function somaSeRespostaAlunoForCorreta(QuestaoProva $questaoProva, RespostasProvaDto $resposta, int &$questoesCorretas): void
+    {
+        if ($questaoProva->getRespostaCorreta() === $resposta->getRespostaAluno()) {
+            $questoesCorretas += 1;
+        }
+    }
+
+    private function calculaNotaProva(int $questoesCorretas): void
+    {
+        $this->nota = round($questoesCorretas * (self::NOTA_MAXIMA / $this->questoes->count()), 1);
+    }
 }

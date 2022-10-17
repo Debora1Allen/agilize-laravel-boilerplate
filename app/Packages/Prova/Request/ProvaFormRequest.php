@@ -12,4 +12,12 @@ class ProvaFormRequest extends FormRequest
             'tema' => 'required|string',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'tema.required' => 'O tema é obrigatório',
+            'tema.string' => 'O tema deve ser uma string',
+        ];
+    }
 }

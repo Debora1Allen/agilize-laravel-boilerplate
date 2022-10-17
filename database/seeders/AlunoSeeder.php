@@ -2,16 +2,18 @@
 
 namespace Database\Seeders;
 
+use App\Packages\Aluno\Models\Aluno;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class AlunoSeeder extends Seeder
 {
     /**
-     * @var \App\Packages\Aluno\Models\Aluno
+     * @var Aluno
      */
-    protected \App\Packages\Aluno\Models\Aluno $aluno;
+    protected Aluno $aluno;
     /**
      * Run the database seeds.
      *
@@ -20,9 +22,7 @@ class AlunoSeeder extends Seeder
     public function run()
     {
         $nome = $this->aluno->getNome();
-        $email = $this->aluno->getEmail();
-        $telenone = $this->aluno->getTelefone();
-        EntityManager::persist(new \App\Packages\Aluno\Models\Aluno($nome,$telenone, $email));
+        EntityManager::persist(new Aluno(Str::uuid(), $nome));
 
         EntityManager::flush();
     }

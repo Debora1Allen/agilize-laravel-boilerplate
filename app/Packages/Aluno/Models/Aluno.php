@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Illuminate\Support\Str;
 
 /**
  * @ORM\Entity
@@ -17,24 +18,29 @@ class Aluno
     use TimestampableEntity;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Domain\Model\Prova" , mappedBy="aluno")
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Prova" , mappedBy="aluno")
      */
-    private Collection $provas;
+    protected Collection $provas;
 
-    public function __construct(
-        /**
-         * @ORM\Id
-         * @ORM\Column(type="uuid", unique=true)
-         * @ORM\GeneratedValue(strategy="CUSTOM")
-         * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
-         */
-        private string $id,
+    /**
+     * @ORM\Id
+     * @ORM\Column(name="id", type="guid")
+     * @ORM\GeneratedValue(strategy="UUID")
+     */
+    protected string $id;
 
         /** @ORM\Column(type="string") */
-        private string $nome,
-    )
+    protected string $nome;
+
+    /**
+     * @param string $id
+     * @param string $nome
+     */
+    public function __construct( string $id, string $nome)
     {
         $this->provas = new ArrayCollection;
+        $this->id = Str::uuid();
+        $this->nome = $nome;
     }
 
     public function getId(): string
@@ -52,8 +58,4 @@ class Aluno
         return $this->provas;
     }
 
-    public function addProva(Prova $prova)
-    {
-        $this->provas->add($prova);
-    }
 }

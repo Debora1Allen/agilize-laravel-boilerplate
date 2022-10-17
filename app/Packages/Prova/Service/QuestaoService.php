@@ -2,6 +2,8 @@
 
 namespace App\Packages\Prova\Service;
 
+use App\Packages\Prova\Models\Questao;
+use App\Packages\Prova\Models\Tema;
 use App\Packages\Prova\Repository\TemaRepository;
 
 class QuestaoService

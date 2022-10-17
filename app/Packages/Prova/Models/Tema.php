@@ -17,14 +17,16 @@ class Tema
     use TimestampableEntity;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Domain\Model\Prova", mappedBy="tema")
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Prova", mappedBy="tema")
      */
     private ?Collection $provas;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Packages\Questao\Domain\Model\Questao", mappedBy="tema")
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Questao", mappedBy="tema")
      */
     private ?Collection $questoes;
+
+
 
     /**
      * @ORM\Id
@@ -39,18 +41,19 @@ class Tema
         private string $slugname;
 
     /**
-     * @param Collection|null $questoes
-     * @param string $id
+     * @param Collection|null $provas
      * @param string $nome
      * @param string $slugname
      */
-    public function __construct(string $nome, string $slugname)
+    public function __construct(?Collection $provas, string $nome, string $slugname)
     {
-        $this->id = Str::uuid()->toString();
+        $this->provas = $provas;
         $this->questoes = new ArrayCollection;
+        $this->id = Str::uuid();
         $this->nome = $nome;
         $this->slugname = $slugname;
     }
+
 
     public function getId(): string
     {
@@ -67,4 +70,5 @@ class Tema
         return $this->slugname;
     }
 }
+
 

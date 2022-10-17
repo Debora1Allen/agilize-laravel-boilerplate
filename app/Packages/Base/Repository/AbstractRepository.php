@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
-class AbstractRepository extends EntityRepository
+abstract class AbstractRepository extends EntityRepository implements RepositoryInterface
 {
     protected string $entityName;
 

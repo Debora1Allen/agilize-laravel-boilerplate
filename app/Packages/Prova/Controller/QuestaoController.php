@@ -3,6 +3,7 @@
 namespace App\Packages\Prova\Controller;
 
 use App\Packages\Prova\Models\Prova;
+use App\Http\Controllers\Controller;
 use App\Packages\Prova\Models\Questao;
 use App\Packages\Prova\Models\Tema;
 use App\Packages\Prova\Repository\ProvaRepository;
@@ -11,9 +12,8 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class QuestaoController
+class QuestaoController extends Controller
 {
-
     public function __construct(private QuestaoRepository $questaoRepository, private QuestaoFacade $questaoFacade)
     {
     }
@@ -59,3 +59,4 @@ class QuestaoController
         }
     }
 }
+

@@ -6,6 +6,7 @@ use App\Packages\Prova\Models\Prova;
 use App\Packages\Prova\Models\Questao;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class QuestaoSeeder extends Seeder
@@ -21,9 +22,9 @@ class QuestaoSeeder extends Seeder
      */
     public function run()
     {
-      $texto = $this->questao->getTexto();
       $tema =  $this->questao->getTema();
-      EntityManager::persist(new Questao($texto,$tema));
+      $pergunta = $this->questao->getPergunta();
+      EntityManager::persist(new Questao(Str::uuid(), $tema,$pergunta));
 
       EntityManager::flush();
     }

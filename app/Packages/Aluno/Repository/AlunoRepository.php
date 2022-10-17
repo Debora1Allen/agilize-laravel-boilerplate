@@ -4,31 +4,11 @@ namespace App\Packages\Aluno\Repository;
 
 use App\Packages\Aluno\Models\Aluno;
 use App\Packages\Base\Repository\AbstractRepository;
+use App\Packages\Base\Repository\Repository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class AlunoRepository extends AbstractRepository
+class AlunoRepository extends Repository
 {
-    public string $entityName = Aluno::class;
-
-    public function findAllAlunos()
-    {
-        return $this->findAll();
-    }
-
-    public function add(Aluno $aluno):Aluno
-    {
-        $this->getEntityManager()->persist($aluno);
-        $this->getEntityManager()->flush();
-        return $aluno;
-    }
-
-    public function findOneAlunoById(string $id): ?Aluno
-    {
-        return $this->findOneBy(['id' => $id]);
-    }
-    public function findOneAlunoByNome(string $nome): ?Aluno
-    {
-        return $this->findOneBy(['nome' => $nome]);
-    }
+    protected string $entityName = Aluno::class;
 }

@@ -1,6 +1,14 @@
 <?php
 
 namespace App\Packages\Prova\Service;
+use App\Packages\Aluno\Models\Aluno;
+use App\Packages\Prova\Models\Prova;
+use App\Packages\Prova\Models\Tema;
+use App\Packages\Prova\Repository\QuestaoRepository;
+use App\Packages\Prova\Repository\TemaRepository;
+use App\Packages\Prova\RespostasProvaDto;
+use Doctrine\Common\Collections\Collection;
+use Illuminate\Support\Str;
 
 class ProvaService
 {

@@ -3,10 +3,11 @@
 namespace App\Packages\Prova\Repository;
 
 use App\Packages\Base\Repository\AbstractRepository;
+use App\Packages\Base\Repository\Repository;
 use App\Packages\Prova\Models\Questao;
 use App\Packages\Prova\Models\Tema;
 
-class QuestaoRepository extends AbstractRepository
+class QuestaoRepository extends Repository
 {
 
 public string $entityName = Questao::class;
