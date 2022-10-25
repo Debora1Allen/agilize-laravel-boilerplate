@@ -3,10 +3,13 @@
 namespace App\Packages\Prova\Service;
 use App\Packages\Aluno\Models\Aluno;
 use App\Packages\Prova\Models\Prova;
+use App\Packages\Prova\Models\Questao;
 use App\Packages\Prova\Models\Tema;
+use App\Packages\Prova\Models\Templates\QuestaoProva;
 use App\Packages\Prova\Repository\QuestaoRepository;
 use App\Packages\Prova\Repository\TemaRepository;
 use App\Packages\Prova\RespostasProvaDto;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Illuminate\Support\Str;
 
@@ -23,8 +26,15 @@ class ProvaService
         $numeroAleatorioDeQuestoes = rand(4, 20);
         $questoesCollection = $this->questaoRepository->findRandomByTemaAndLimit($tema, $numeroAleatorioDeQuestoes);
         $this->throwExceptionSeTemaNaoPossuirQuestoes($questoesCollection);
-        $prova = new Prova(Str::uuid(), $aluno, $tema);
-        $prova->setQuestoes($questoesCollection);
+        $prova = new Prova($aluno, $tema);
+
+        foreach ($questoesCollection as $questao) {
+            /** @var Questao $questao */
+            $this->questoes = new ArrayCollection;
+            $questaoProva = new QuestaoProva($this, $questao->getPergunta());
+            $questaoProva->setAlternativas($questao->getAlternativas());
+            $this->questoes->add($questaoProva);
+        }
         return $prova;
     }
 

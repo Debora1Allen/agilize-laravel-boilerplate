@@ -14,12 +14,12 @@ class AlunoFacade
 
     public function create(string $nome)
     {
-        $aluno = new Aluno(Str::uuid(), $nome);
+        $aluno = new Aluno($nome);
         $this->alunoRepository->add($aluno);
         return $aluno;
     }
 
-    public function getAll()
+    public function findAll()
     {
         return $this->alunoRepository->findAll();
     }

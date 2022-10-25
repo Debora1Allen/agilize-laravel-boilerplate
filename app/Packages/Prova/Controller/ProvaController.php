@@ -27,30 +27,30 @@ class ProvaController extends Controller
     public function index()
     {
         try {
-            $provas = $this->provaFacade->getAll();
-            return response()->json(['data' => ProvaResponse::collection($provas)], HttpStatusConstants::OK);
-        } catch (\Exception $exception) {
-            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+            $provas = $this->provaFacade->findAll();
+            return response()->json(['data' => ProvaResponse::collection($provas)]);
+        }catch (Exception $exception){
+            throw new Exception($exception->getMessage(), 1664303115);
         }
     }
 
     public function show(Prova $prova)
     {
         try {
-            return response()->json(['data' => ProvaResponse::item($prova)], HttpStatusConstants::OK);
-        } catch (\Exception $exception) {
-            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+            return response()->json(['data' => ProvaResponse::item($prova)]);
+        }catch (Exception $exception){
+            throw new Exception($exception->getMessage(), 1664303115);
         }
     }
 
-    public function store(Aluno $aluno, ProvaRequest $request)
+    public function store(Aluno $aluno, ProvaFormRequest $request)
     {
         try {
             $prova = $this->provaFacade->create($aluno, $request->get('tema'));
             $this->provaRepository->flush();
-            return response()->json(['data' => ProvaResponse::item($prova)], HttpStatusConstants::CREATED);
-        } catch (\Exception $exception) {
-            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+            return response()->json(['data' => ProvaResponse::item($prova)], 201);
+        }catch (Exception $exception){
+            throw new Exception($exception->getMessage(), 1664303115);
         }
     }
 
@@ -59,9 +59,9 @@ class ProvaController extends Controller
         try {
             $prova = $this->provaFacade->responder($prova, $request->get('respostas'));
             $this->provaRepository->flush();
-            return response()->json(['data' => ProvaResponse::item($prova)], HttpStatusConstants::CREATED);
-        } catch (\Exception $exception) {
-            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+            return response()->json(['data' => ProvaResponse::item($prova)], 201);
+        }catch (Exception $exception){
+            throw new Exception($exception->getMessage(), 1664303115);
         }
     }
 }

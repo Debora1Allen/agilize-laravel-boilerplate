@@ -29,7 +29,13 @@ Route::get('/healthcheck', function () {
 
 Route::get('/aluno', [AlunoController::class, 'index']);
 Route::post('/aluno', [AlunoController::class, 'store']);
+Route::get('alunos/{id_aluno}/provas',[AlunoController::class, 'listalunoProvas']);
 Route::get('/prova', [ProvaController::class, 'show']);
 Route::post('/prova', [ProvaController::class, 'store']);
-Route::post('/questao', [QuestaoController::class, 'store']);
-Route::post('/resposta', [RespostaController::class, 'store']);
+Route::post('/prova', [ProvaController::class, 'index']);
+Route::post('/prova', [ProvaController::class, 'index']);
+Route::put('/prova/{id_prova}', [ProvaController::class, 'enviarRepostas']);
+
+
+
+

@@ -20,8 +20,16 @@ class AlunoController extends Controller
     public function index()
     {
         try {
-            $alunos = $this->alunoFacade->getAll();
-            return response()->json(['data' => AlunoResponse::collection($alunos)], 200);
+            $alunos = $this->alunoFacade->findAll();
+            $alunosArray = collect();
+
+            foreach ($alunos as $aluno){
+                $alunosArray->add([
+                    'id' => $aluno->getId(),
+                    'nome' => $aluno->getNome(),
+                ]);
+            }
+            return response()->json($alunosArray->toArray());
         }catch (Exception $exception){
             throw new Exception($exception->getMessage(), 1664303115);
         }
@@ -32,19 +40,22 @@ class AlunoController extends Controller
         try {
             $aluno = $this->alunoFacade->create($request->get('nome'));
             $this->alunoRepository->flush();
-            return response()->json(['data' => AlunoResponse::item($aluno)], 201);
+            $data = [
+                'nome' => $aluno->getNome(),
+            ];
+            return response()->json([$data, ], 201);
         }catch (Exception $exception){
             throw new Exception($exception->getMessage(), 1664303115);
         }
     }
 
-    public function listProvas(Aluno $aluno)
+    public function listalunoProvas(Aluno $aluno)
     {
         try {
             $prova = $aluno->getProvas()->toArray();
-            return response()->json(['data' => ProvaResponse::collection($prova)], HttpStatusConstants::OK);
-        } catch (\Exception $exception) {
-            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+            return response()->json(['data' => ProvaResponse::collection($prova)], 200);
+        }catch (Exception $exception){
+            throw new Exception($exception->getMessage(), 1664303115);
         }
     }
 }

@@ -8,7 +8,6 @@ class Repository extends AbstractRepository
 {
     /**
      * @param object $entity
-     * @return void
      */
     public function add(object $entity)
     {

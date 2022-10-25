@@ -21,6 +21,11 @@ class ProvaFacade
         return $prova;
     }
 
+    public function findAll()
+    {
+        return $this->provaRepository->findAll();
+    }
+
     public function responder(Prova $prova, array $respostas): Prova
     {
         $this->provaService->responder($prova, $respostas);
@@ -28,9 +33,6 @@ class ProvaFacade
         return $prova;
     }
 
-    public function getAll()
-    {
-        return $this->provaRepository->findAll();
-    }
+
 }
 

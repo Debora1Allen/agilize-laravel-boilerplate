@@ -57,32 +57,28 @@ class Prova
         private Tema $tema;
 
         /** @ORM\Column(type="float", nullable=true) */
-        private ?float $nota = null;
+        private float $nota;
 
         /** @ORM\Column(type="datetime", nullable=true) */
-        private ?\DateTime $submetidaEm = null;
+        private ?\DateTime $submetidaEm;
 
         /** @ORM\Column(type="string", options={"default":"Aberta"}) */
-        private ?string $status = 'Aberta';
+        private string $status;
 
     /**
-     * @param Collection $questoes
-     * @param string $id
+
      * @param Aluno $aluno
      * @param Tema $tema
-     * @param float|null $nota
-     * @param \DateTime|null $submetidaEm
-     * @param string|null $status
      */
-    public function __construct( Aluno $aluno, Tema $tema, ?float $nota, ?\DateTime $submetidaEm, ?string $status)
+    public function __construct( Aluno $aluno, Tema $tema)
     {
         $this->questoes = new ArrayCollection;
         $this->id = Str::uuid();
         $this->aluno = $aluno;
         $this->tema = $tema;
-        $this->nota = $nota;
-        $this->submetidaEm = $submetidaEm;
-        $this->status = $status;
+        $this->nota = 0;
+        $this->submetidaEm = null;
+        $this->status = null;
     }
 
 

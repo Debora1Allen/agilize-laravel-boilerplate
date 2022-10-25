@@ -36,11 +36,11 @@ class Aluno
      * @param string $id
      * @param string $nome
      */
-    public function __construct( string $id, string $nome)
+    public function __construct(string $nome)
     {
-        $this->provas = new ArrayCollection;
         $this->id = Str::uuid();
         $this->nome = $nome;
+        $this->provas = new ArrayCollection;
     }
 
     public function getId(): string

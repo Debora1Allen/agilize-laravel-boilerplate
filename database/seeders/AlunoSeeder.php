@@ -22,7 +22,7 @@ class AlunoSeeder extends Seeder
     public function run()
     {
         $nome = $this->aluno->getNome();
-        EntityManager::persist(new Aluno(Str::uuid(), $nome));
+        EntityManager::persist(new Aluno($nome));
 
         EntityManager::flush();
     }
