@@ -71,14 +71,14 @@ class Questao
 
     public function setRespostas(array $respostas)
     {
-        $alternativasCorretas = 0;
+        $respostasCorretas = 0;
         foreach ($respostas as $resposta) {
             if($resposta['isCorreta'] === true) {
-                $alternativasCorretas++;
+                $respostasCorretas++;
             }
             $this->repostas->add(new Resposta( $this, $resposta['resposta'], $resposta['isCorreta']));
         }
-       return $alternativasCorretas;
+       return $respostasCorretas;
     }
 
 }

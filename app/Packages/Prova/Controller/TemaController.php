@@ -50,7 +50,7 @@ class TemaController extends Controller
         try {
             $temas = $this->temaFacade->getAll();
             return response()->json(['data' => TemaResponse::collection($temas)]);
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             throw new Exception($exception->getMessage(), 1666748818);
         }
     }
@@ -66,7 +66,7 @@ class TemaController extends Controller
             $tema = $this->temaFacade->create($request->get('nome'), $request->get('slugname'));
             $this->temaRepository->flush();
             return response()->json(['data' => TemaResponse::item($tema)], 201);
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             throw new Exception($exception->getMessage(), 1664303115);
         }
     }

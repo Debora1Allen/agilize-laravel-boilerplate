@@ -14,7 +14,7 @@ class QuestaoResponse
             'resposta' => $questao->getRepostas(),
             'respostas' => array_map(fn($resposta) => [
                 'id' => $resposta->getId(),
-                'resposta' => $resposta->getAlternativa(),
+                'resposta' => $resposta->getTexto(),
                 'correta' => $resposta->isCorreta(),
             ], $questao->getRepostas()->toArray())
         ];

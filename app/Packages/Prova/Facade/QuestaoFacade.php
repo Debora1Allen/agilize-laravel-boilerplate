@@ -44,12 +44,12 @@ class QuestaoFacade
 
     /**
      * @param Questao $questao
-     * @param array $alternativas
+     * @param array $respostas
      * @return Questao
      */
-    public function addRespostas(Questao $questao, array $alternativas): Questao
+    public function addRespostas(Questao $questao, array $respostas): Questao
     {
-        $this->questaoService->addRespostas($questao, $alternativas);
+        $this->questaoService->addRespostas($questao, $respostas);
         $this->questaoRepository->update($questao);
         return $questao;
     }

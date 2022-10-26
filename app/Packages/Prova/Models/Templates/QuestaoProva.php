@@ -33,7 +33,7 @@ class QuestaoProva
     protected string $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Packages\Prova\Models\Prova",inversedBy="questoes")
+     * @ORM\ManyToOne(targetEntity="App\Packages\Prova\Models\Prova",inversedBy="questoes_prova")
      */
     protected Prova $prova;
 
