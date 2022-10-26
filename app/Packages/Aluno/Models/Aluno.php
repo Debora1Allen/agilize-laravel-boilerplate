@@ -2,7 +2,6 @@
 
 namespace App\Packages\Aluno\Models;
 
-use App\Packages\Prova\Models\Prova;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

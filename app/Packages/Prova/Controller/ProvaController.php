@@ -23,7 +23,6 @@ use function PHPUnit\Framework\assertDoesNotMatchRegularExpression;
 class ProvaController extends Controller
 {
 
-
     /**
      * @var ProvaRepository
      */

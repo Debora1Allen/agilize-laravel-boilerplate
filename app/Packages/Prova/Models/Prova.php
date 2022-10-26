@@ -25,7 +25,6 @@ class Prova
     const NOTA_MAXIMA = 10.0;
     const CONCLUIDA = 'Concluida';
     const ABERTA = 'Aberta';
-    const HORA_EM_SEGUNDOS = 3600;
 
     /**
      * @ORM\OneToMany (targetEntity="App\Packages\Prova\Models\Templates\QuestaoProva", mappedBy="prova", cascade={"all"})
@@ -42,28 +41,24 @@ class Prova
 
         /**
          * @ORM\ManyToOne(
-         *     targetEntity="App\Packages\Aluno\Models\Aluno",
-         *     inversedBy="provas"
-         * )
+         *     targetEntity="App\Packages\Aluno\Models\Aluno",inversedBy="provas")
          */
-        private Aluno $aluno;
+    protected Aluno $aluno;
 
         /**
          * @ORM\ManyToOne(
-         *     targetEntity="App\Packages\Prova\Models\Tema",
-         *     inversedBy="provas"
-         * )
+         *     targetEntity="App\Packages\Prova\Models\Tema",inversedBy="provas")
          */
-        private Tema $tema;
+    protected Tema $tema;
 
         /** @ORM\Column(type="float", nullable=true) */
-        private float $nota;
+    protected float $nota;
 
         /** @ORM\Column(type="datetime", nullable=true) */
-        private ?\DateTime $submetidaEm;
+    protected ?\DateTime $submetidaEm;
 
         /** @ORM\Column(type="string", options={"default":"Aberta"}) */
-        private string $status;
+    protected string $status;
 
     /**
 
@@ -122,44 +117,20 @@ class Prova
         return $this->tema;
     }
 
-    public function responder(\Illuminate\Support\Collection  $respostas): void
+    public function responder(\Illuminate\Support\Collection $respostas, RespostasProvaDto $respostasProvaDto = null): void
     {
         $this->submetidaEm = now();
         $this->status = self::CONCLUIDA;
         $questoesProva = $this->questoes;
-
+        $questoesCorretas = 0;
         foreach ($questoesProva as $key => $questaoProva) {
             /** @var QuestaoProva $questaoProva */
             $questaoProva->setRespostaAluno($respostas[$key]->getRespostaAluno());
-            $this->somaSeRespostaAlunoForCorreta($questaoProva, $respostas[$key], $questoesCorretas);
+            if ($questaoProva->getRespostaCorreta() === $respostasProvaDto->getRespostaAluno()) {
+                $questoesCorretas += 1;
+            }
         }
-        $questoesCorretas = $this->verificaESetaRespostasCorretasDoAluno($respostas, $questoesCorretas);
-
-        $this->calculaNotaProva($questoesCorretas);
-    }
-
-    private function verificaESetaRespostasCorretasDoAluno(Collection $respostas, int $questoesCorretas): int
-    {
-        $questoesProva = $this->questoes;
-
-        foreach ($questoesProva as $key => $questaoProva) {
-            /** @var QuestaoProva $questaoProva */
-            $questaoProva->setRespostaAluno($respostas[$key]->getRespostaAluno());
-            $this->somaSeRespostaAlunoForCorreta($questaoProva, $respostas[$key], $questoesCorretas);
-        }
-
-        return $questoesCorretas;
-    }
-
-    private function somaSeRespostaAlunoForCorreta(QuestaoProva $questaoProva, RespostasProvaDto $resposta, int &$questoesCorretas): void
-    {
-        if ($questaoProva->getRespostaCorreta() === $resposta->getRespostaAluno()) {
-            $questoesCorretas += 1;
-        }
-    }
-
-    private function calculaNotaProva(int $questoesCorretas): void
-    {
         $this->nota = round($questoesCorretas * (self::NOTA_MAXIMA / $this->questoes->count()), 1);
     }
+
 }

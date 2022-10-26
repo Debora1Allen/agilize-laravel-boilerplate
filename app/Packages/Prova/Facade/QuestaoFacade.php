@@ -6,12 +6,35 @@ use App\Packages\Prova\Models\Questao;
 use App\Packages\Prova\Repository\QuestaoRepository;
 use App\Packages\Prova\Service\QuestaoService;
 
+/**
+ *
+ */
 class QuestaoFacade
 {
-    public function __construct(private QuestaoService $questaoService, private QuestaoRepository $questaoRepository)
+    /**
+     * @var QuestaoService
+     */
+    protected QuestaoService $questaoService;
+    /**
+     * @var QuestaoRepository
+     */
+    protected QuestaoRepository $questaoRepository;
+
+    /**
+     * @param QuestaoService $questaoService
+     * @param QuestaoRepository $questaoRepository
+     */
+    public function __construct(QuestaoService $questaoService, QuestaoRepository $questaoRepository)
     {
+        $this->questaoService = $questaoService;
+        $this->questaoRepository = $questaoRepository;
     }
 
+    /**
+     * @param string $temaSlugname
+     * @param string $pergunta
+     * @return Questao
+     */
     public function create(string $temaSlugname, string $pergunta): Questao
     {
         $questao = $this->questaoService->create($temaSlugname, $pergunta);
@@ -19,6 +42,11 @@ class QuestaoFacade
         return $questao;
     }
 
+    /**
+     * @param Questao $questao
+     * @param array $alternativas
+     * @return Questao
+     */
     public function addRespostas(Questao $questao, array $alternativas): Questao
     {
         $this->questaoService->addRespostas($questao, $alternativas);
@@ -26,6 +54,9 @@ class QuestaoFacade
         return $questao;
     }
 
+    /**
+     * @return array|object[]
+     */
     public function getAll()
     {
         return $this->questaoRepository->findAll();

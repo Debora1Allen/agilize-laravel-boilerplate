@@ -24,7 +24,7 @@ class QuestaoSeeder extends Seeder
     {
       $tema =  $this->questao->getTema();
       $pergunta = $this->questao->getPergunta();
-      EntityManager::persist(new Questao(Str::uuid(), $tema,$pergunta));
+      EntityManager::persist(new Questao($tema,$pergunta));
 
       EntityManager::flush();
     }

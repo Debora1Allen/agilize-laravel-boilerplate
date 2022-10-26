@@ -62,11 +62,9 @@ class ProvaService
     {
         $respostasDtoCollection = collect();
         sort($respostas);
-
         foreach ($respostas as $resposta) {
             $respostasDtoCollection->add(new RespostasProvaDto($resposta['questaoId'], $resposta['respostaAluno']));
         }
-
         $prova->responder($respostasDtoCollection);
         return $prova;
     }

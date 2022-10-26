@@ -17,12 +17,34 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ *
+ */
 class TemaController extends Controller
 {
-    public function __construct(private TemaRepository $temaRepository, private TemaFacade $temaFacade)
+    /**
+     * @var TemaRepository
+     */
+    protected TemaRepository $temaRepository;
+    /**
+     * @var TemaFacade
+     */
+    protected TemaFacade $temaFacade;
+
+    /**
+     * @param TemaRepository $temaRepository
+     * @param TemaFacade $temaFacade
+     */
+    public function __construct(TemaRepository $temaRepository, TemaFacade $temaFacade)
     {
+        $this->temaRepository = $temaRepository;
+        $this->temaFacade = $temaFacade;
     }
 
+    /**
+     * @return JsonResponse
+     * @throws Exception
+     */
     public function index()
     {
         try {
@@ -33,6 +55,11 @@ class TemaController extends Controller
         }
     }
 
+    /**
+     * @param TemaFormRequest $request
+     * @return JsonResponse
+     * @throws Exception
+     */
     public function store(TemaFormRequest $request)
     {
         try {
