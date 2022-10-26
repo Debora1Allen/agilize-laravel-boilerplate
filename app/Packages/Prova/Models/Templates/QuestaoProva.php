@@ -18,7 +18,7 @@ class QuestaoProva
     use TimestampableEntity;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Templates\RespostaProva", mappedBy="questao", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Templates\RespostaProva", mappedBy="questoes_prova", cascade={"all"})
      */
     protected ?Collection $repostas;
 

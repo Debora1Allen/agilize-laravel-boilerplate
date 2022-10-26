@@ -25,7 +25,7 @@ class RespostaProva
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="App\Packages\Prova\Models\Templates\QuestaoProva", inversedBy="resposta")
+     *     targetEntity="App\Packages\Prova\Models\Templates\QuestaoProva", inversedBy="resposta-prova")
      */
     protected QuestaoProva $questao;
 
