@@ -21,17 +21,17 @@ class ProvaResponse
             'questoes' => array_map(function ($questao) use ($prova) {
                 $questaoData = [
                     'id' => $questao->getId(),
-                    'pergunta' => $questao->getPergunta(),
+                    'texto' => $questao->getTexto(),
                     'respostaAluno' => $questao->getRespostaAluno(),
 
                 ];
                 if ($prova->getStatus() === Prova::ABERTA) {
-                    $questaoData['alternativas'] = array_map(function ($alternativa) {
+                    $questaoData['texto'] = array_map(function ($respostasAluno) {
                         return [
-                            'id' => $alternativa->getId(),
-                            'alternativa' => $alternativa->getAlternativa(),
+                            'id' => $respostasAluno->getId(),
+                            'texto' => $respostasAluno->getTexto(),
                         ];
-                    }, $questao->getAlternativas()->toArray());
+                    }, $questao->getRespostas()->toArray());
                 }
                 if ($prova->getStatus() === Prova::CONCLUIDA) {
                     $questaoData['respostaCorreta'] = $questao->getRespostaCorreta();

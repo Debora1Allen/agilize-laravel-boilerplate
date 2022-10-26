@@ -23,8 +23,7 @@ class Resposta
     protected string $id;
 
         /**
-         * @ORM\ManyToOne(
-         *     targetEntity="App\Packages\Prova\Models\Questao",inversedBy="alternativas")
+         * @ORM\ManyToOne(targetEntity="App\Packages\Prova\Models\Questao",inversedBy="repostas")
          */
         private Questao $questao;
 
@@ -58,7 +57,7 @@ class Resposta
         return $this->questao;
     }
 
-    public function getAlternativa(): string
+    public function getRespostas(): string
     {
         return $this->resposta;
     }

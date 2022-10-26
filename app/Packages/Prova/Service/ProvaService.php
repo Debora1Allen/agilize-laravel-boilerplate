@@ -17,11 +17,11 @@ class ProvaService
     /**
      * @var TemaRepository
      */
-    private TemaRepository $temaRepository;
+    protected TemaRepository $temaRepository;
     /**
      * @var QuestaoRepository
      */
-    private QuestaoRepository $questaoRepository;
+    protected QuestaoRepository $questaoRepository;
 
     /**
      * @param TemaRepository $temaRepository
@@ -46,7 +46,7 @@ class ProvaService
         foreach ($questoesCollection as $questao) {
             /** @var Questao $questao */
             $this->questoes = new ArrayCollection;
-            $questaoProva = new QuestaoProva($this, $questao->getPergunta());
+            $questaoProva = new QuestaoProva($this, $questao->getTexto());
             $questaoProva->setRespostas($questao->getRepostas());
             $this->questoes->add($questaoProva);
         }

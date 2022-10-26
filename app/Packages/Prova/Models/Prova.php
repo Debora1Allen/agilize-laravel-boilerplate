@@ -77,16 +77,6 @@ class Prova
     }
 
 
-    public function setQuestoes(array $questoesCollection)
-    {
-        foreach ($questoesCollection as $questao) {
-            /** @var Questao $questao */
-            $questaoProva = new QuestaoProva($this, $questao->getPergunta());
-            $questaoProva->setRespostas($questao->getRepostas());
-            $this->questoes->add($questaoProva);
-        }
-    }
-
     public function getId(): string
     {
         return $this->id;

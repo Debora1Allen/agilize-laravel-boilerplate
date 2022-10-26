@@ -17,28 +17,27 @@ class Tema
     use TimestampableEntity;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Prova", mappedBy="tema")
-     */
-    private ?Collection $provas;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Questao", mappedBy="tema")
-     */
-    private ?Collection $questoes;
-
-
-
-    /**
      * @ORM\Id
      * @ORM\Column(name="id", type="guid")
      * @ORM\GeneratedValue(strategy="UUID")
      */
     protected string $id;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Prova", mappedBy="tema")
+     */
+    protected ?Collection $provas;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Questao", mappedBy="tema")
+     */
+    protected ?Collection $questoes;
+
+
         /** @ORM\Column(type="string") */
-        private string $nome;
+    protected string $nome;
         /** @ORM\Column(type="string") */
-        private string $slugname;
+    protected string $slugname;
 
     /**
      * @param string $nome

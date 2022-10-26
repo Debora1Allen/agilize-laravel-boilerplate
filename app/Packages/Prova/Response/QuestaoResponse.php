@@ -11,12 +11,12 @@ class QuestaoResponse
         return [
             'id' => $questao->getId(),
             'tema' => $questao->getTema()->getNome(),
-            'pergunta' => $questao->getPergunta(),
+            'resposta' => $questao->getRepostas(),
             'respostas' => array_map(fn($resposta) => [
                 'id' => $resposta->getId(),
                 'resposta' => $resposta->getAlternativa(),
                 'correta' => $resposta->isCorreta(),
-            ], $questao->getAlternativas()->toArray())
+            ], $questao->getRepostas()->toArray())
         ];
     }
 

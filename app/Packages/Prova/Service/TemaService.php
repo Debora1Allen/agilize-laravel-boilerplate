@@ -10,7 +10,6 @@ use App\Packages\Prova\Repository\TemaRepository;
  */
 class TemaService
 {
-
     /**
      * @var TemaRepository
      */
@@ -23,7 +22,6 @@ class TemaService
     {
         $this->temaRepository = $temaRepository;
     }
-
 
     /**
      * @param string $nome

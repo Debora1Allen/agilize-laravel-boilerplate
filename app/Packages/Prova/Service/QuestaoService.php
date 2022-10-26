@@ -24,25 +24,24 @@ class QuestaoService
     }
 
     /**
-     * @param string $temaSlugname
-     * @param string $pergunta
+     * @param string $slugname
+     * @param string $texto
      * @return Questao
      */
-    public function create(string $temaSlugname, string $pergunta): Questao
+    public function create(string $slugname, string $texto): Questao
     {
-        $tema = $this->temaRepository->findOneBySlugname($temaSlugname);
-        $questao = new Questao($tema, $pergunta);
+        $tema = $this->temaRepository->findOneBySlugname($slugname);
+        $questao = new Questao($tema, $texto);
         return $questao;
     }
 
     /**
      * @param Questao $questao
-     * @param array $alternativas
+     * @param array $respostas
      * @return void
      */
-    public function addRespostas(Questao $questao, array $alternativas): void
+    public function addRespostas(Questao $questao, array $respostas): void
     {
-        $questao->setRespostas($alternativas);
+        $questao->setRespostas($respostas);
     }
-
 }

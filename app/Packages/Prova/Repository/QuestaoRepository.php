@@ -22,7 +22,6 @@ public string $entityName = Questao::class;
             ->orderBy('RANDOM()')
             ->setParameter('tema', $tema)
             ->getQuery();
-
         return $query->getResult();
     }
 }

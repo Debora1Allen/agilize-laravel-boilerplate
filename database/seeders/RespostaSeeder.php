@@ -22,7 +22,7 @@ class RespostaSeeder extends Seeder
      */
     public function run()
     {
-      $alternativa = $this->resposta->getAlternativa();
+      $alternativa = $this->resposta->getRespostas();
       $questao = $this->resposta->getQuestao();
       $correta = $this->resposta->isCorreta();
       EntityManager::persist(new Resposta($questao,$alternativa,$correta));

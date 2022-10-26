@@ -34,18 +34,18 @@ class Questao
     protected Tema   $tema;
 
     /** @ORM\Column(type="string") */
-    protected string $pergunta;
+    protected string $texto;
 
     /**
      * @param Tema $tema
      * @param string $pergunta
      */
-    public function __construct( Tema $tema, string $pergunta)
+    public function __construct( Tema $tema, string $texto)
     {
         $this->id = Str::uuid();
         $this->repostas = new ArrayCollection;;
         $this->tema = $tema;
-        $this->pergunta = $pergunta;
+        $this->texto = $texto;
     }
 
 
@@ -59,9 +59,9 @@ class Questao
         return $this->tema;
     }
 
-    public function getPergunta(): string
+    public function getTexto(): string
     {
-        return $this->pergunta;
+        return $this->texto;
     }
 
     public function getRepostas(): Collection|array|null
