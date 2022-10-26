@@ -25,7 +25,7 @@ class RespostaSeeder extends Seeder
       $alternativa = $this->resposta->getAlternativa();
       $questao = $this->resposta->getQuestao();
       $correta = $this->resposta->isCorreta();
-      EntityManager::persist(new Resposta(Str::uuid(),$questao,$alternativa,$correta));
+      EntityManager::persist(new Resposta($questao,$alternativa,$correta));
       EntityManager::flush();
     }
 }

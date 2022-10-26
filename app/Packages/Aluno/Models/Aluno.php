@@ -18,7 +18,7 @@ class Aluno
     use TimestampableEntity;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Prova" , mappedBy="aluno")
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Prova", mappedBy="aluno")
      */
     protected Collection $provas;
 
@@ -43,16 +43,25 @@ class Aluno
         $this->provas = new ArrayCollection;
     }
 
+    /**
+     * @return string
+     */
     public function getId(): string
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getNome(): string
     {
         return $this->nome;
     }
 
+    /**
+     * @return Collection
+     */
     public function getProvas(): Collection
     {
         return $this->provas;

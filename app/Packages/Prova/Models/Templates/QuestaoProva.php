@@ -18,12 +18,12 @@ class QuestaoProva
     use TimestampableEntity;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Templates\RespostaProva", fetch="EXTRA_LAZY", mappedBy="questao", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Templates\RespostaProva", mappedBy="questao", cascade={"all"})
      */
-    private ?Collection $repostas;
+    protected ?Collection $repostas;
 
     /** @ORM\Column(type="string") */
-    private ?string $respostaCorreta;
+    protected string $respostaCorreta;
 
     /**
      * @ORM\Id
@@ -33,35 +33,38 @@ class QuestaoProva
     protected string $id;
 
     /**
-     * @ORM\ManyToOne(
-     *     targetEntity="App\Packages\Prova\Models\Prova",
-     *     inversedBy="questoes"
-     * )
+     * @ORM\ManyToOne(targetEntity="App\Packages\Prova\Models\Prova",inversedBy="questoes")
      */
-    private Prova $prova;
+    protected Prova $prova;
 
     /** @ORM\Column(type="string") */
-    private string $pergunta;
+    protected string $texto;
 
     /** @ORM\Column(type="string", nullable=true) */
-    private ?string $respostaAluno = null;
+    protected string $respostaAluno;
 
 
     /**
-     * @param string $id
      * @param Prova $prova
-     * @param string $pergunta
-     * @param string|null $respostaAluno
+     * @param string $texto
      */
 
-    public function __construct(Prova $prova, string $pergunta)
+    public function __construct(Prova $prova, string $texto)
     {
         $this->id = Str::uuid();
         $this->repostas = new ArrayCollection;
         $this->respostaCorreta = null;
         $this->prova = $prova;
-        $this->pergunta = $pergunta;
+        $this->texto = $texto;
         $this->respostaAluno = null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTexto(): string
+    {
+        return $this->texto;
     }
 
 
@@ -70,23 +73,20 @@ class QuestaoProva
         return $this->id;
     }
 
-    public function getPergunta(): string
-    {
-        return $this->pergunta;
-    }
+
 
     public function getRepostas(): ?Collection
     {
         return $this->repostas;
     }
 
-    public function setAlternativas($alternativas)
+    public function setRespostas($respostas)
     {
-        foreach ($alternativas as $alternativa) {
-            if ($alternativa->isCorreta()) {
-                $this->respostaCorreta = $alternativa->getAlternativa();
+        foreach ($respostas as $resposta) {
+            if ($resposta->isCorreta()) {
+                $this->respostaCorreta = $resposta->getReposta();
             }
-            $this->repostas->add(new RespostaProva($this, $alternativa->getAlternativa(), $alternativa->isCorreta()));
+            $this->repostas->add(new RespostaProva($this, $resposta->getReposta(), $resposta->isCorreta()));
         }
     }
 

@@ -13,14 +13,13 @@ class QuestaoRepository extends Repository
 public string $entityName = Questao::class;
 
 
-    public function findRandomByTemaAndLimit(Tema $tema, int $limit): array
+    public function findRandomByTema(Tema $tema): array
     {
         $query = $this->createQueryBuilder('questions')
             ->select('questions')
             ->where('questions.tema = :tema')
             ->andWhere('questions.alternativas IS NOT EMPTY')
             ->orderBy('RANDOM()')
-            ->setMaxResults($limit)
             ->setParameter('tema', $tema)
             ->getQuery();
 

@@ -87,7 +87,7 @@ class Prova
         foreach ($questoesCollection as $questao) {
             /** @var Questao $questao */
             $questaoProva = new QuestaoProva($this, $questao->getPergunta());
-            $questaoProva->setAlternativas($questao->getAlternativas());
+            $questaoProva->setRespostas($questao->getRepostas());
             $this->questoes->add($questaoProva);
         }
     }
@@ -126,22 +126,16 @@ class Prova
     {
         $this->submetidaEm = now();
         $this->status = self::CONCLUIDA;
+        $questoesProva = $this->questoes;
 
-        $this->throwExceptionIfProvaForaDoPrazo();
-
-        $questoesCorretas = 0;
+        foreach ($questoesProva as $key => $questaoProva) {
+            /** @var QuestaoProva $questaoProva */
+            $questaoProva->setRespostaAluno($respostas[$key]->getRespostaAluno());
+            $this->somaSeRespostaAlunoForCorreta($questaoProva, $respostas[$key], $questoesCorretas);
+        }
         $questoesCorretas = $this->verificaESetaRespostasCorretasDoAluno($respostas, $questoesCorretas);
 
         $this->calculaNotaProva($questoesCorretas);
-    }
-
-    private function throwExceptionIfProvaForaDoPrazo(): void
-    {
-        $submetidaEm = Carbon::instance($this->submetidaEm);
-        if ($submetidaEm->diffInSeconds($this->createdAt) > self::HORA_EM_SEGUNDOS) {
-            $this->nota = 0;
-            throw new \Exception('Prova enviada fora do tempo limite.', 1663470013);
-        }
     }
 
     private function verificaESetaRespostasCorretasDoAluno(Collection $respostas, int $questoesCorretas): int

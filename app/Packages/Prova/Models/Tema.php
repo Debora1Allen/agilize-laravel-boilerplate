@@ -41,15 +41,14 @@ class Tema
         private string $slugname;
 
     /**
-     * @param Collection|null $provas
      * @param string $nome
      * @param string $slugname
      */
-    public function __construct(?Collection $provas, string $nome, string $slugname)
+    public function __construct(string $nome, string $slugname)
     {
-        $this->provas = $provas;
-        $this->questoes = new ArrayCollection;
         $this->id = Str::uuid();
+        $this->provas = new ArrayCollection;
+        $this->questoes = new ArrayCollection;
         $this->nome = $nome;
         $this->slugname = $slugname;
     }

@@ -25,7 +25,7 @@ class TemaSeeder extends Seeder
     {
       $nome = $this->tema->getNome();
       $slugname = $this->tema->getSlugname();
-      EntityManager::persist(new Tema(Str::uuid(),$nome, $slugname));
+      EntityManager::persist(new Tema($nome, $slugname));
       EntityManager::flush();
     }
 }

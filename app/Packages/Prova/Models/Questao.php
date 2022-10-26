@@ -17,32 +17,37 @@ class Questao
     use TimestampableEntity;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Resposta", fetch="EXTRA_LAZY", mappedBy="questao", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Models\Resposta",mappedBy="questao", cascade={"all"})
      */
-    private ?Collection $alternativas;
+    protected ?Collection $repostas;
 
-    public function __construct(
-        /**
-         * @ORM\Id
-         * @ORM\Column(name="id", type="guid")
-         * @ORM\GeneratedValue(strategy="UUID")
-         */
-        protected string $id,
+    /**
+     * @ORM\Id
+     * @ORM\Column(name="id", type="guid")
+     * @ORM\GeneratedValue(strategy="UUID")
+     */
+    protected string $id;
 
-        /**
-         * @ORM\ManyToOne(
-         *     targetEntity="App\Packages\Prova\Models\Tema",
-         *     inversedBy="questoes"
-         * )
-         */
-        private Tema   $tema,
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Packages\Prova\Models\Tema", inversedBy="questoes")
+     */
+    protected Tema   $tema;
 
-        /** @ORM\Column(type="string") */
-        private string $pergunta,
-    )
+    /** @ORM\Column(type="string") */
+    protected string $pergunta;
+
+    /**
+     * @param Tema $tema
+     * @param string $pergunta
+     */
+    public function __construct( Tema $tema, string $pergunta)
     {
-        $this->alternativas = new ArrayCollection;
+        $this->id = Str::uuid();
+        $this->repostas = new ArrayCollection;;
+        $this->tema = $tema;
+        $this->pergunta = $pergunta;
     }
+
 
     public function getId(): string
     {
@@ -59,32 +64,23 @@ class Questao
         return $this->pergunta;
     }
 
-    public function getAlternativas(): Collection|array|null
+    public function getRepostas(): Collection|array|null
     {
-        return $this->alternativas;
+        return $this->repostas;
     }
 
-    public function setAlternativas(array $alternativas)
+    public function setRespostas(array $respostas)
     {
         $alternativasCorretas = 0;
-        foreach ($alternativas as $alternativa) {
-            if($alternativa['isCorreta'] === true) {
+        foreach ($respostas as $resposta) {
+            if($resposta['isCorreta'] === true) {
                 $alternativasCorretas++;
             }
-            $this->alternativas->add(new Resposta(Str::uuid(), $this, $alternativa['alternativa'], $alternativa['isCorreta']));
+            $this->repostas->add(new Resposta( $this, $resposta['resposta'], $resposta['isCorreta']));
         }
-        $this->throwExceptionSeNaoExistirSomenteUmaAlternativaCorreta($alternativasCorretas);
+       return $alternativasCorretas;
     }
 
-    private function throwExceptionSeNaoExistirSomenteUmaAlternativaCorreta(int $alternativasCorretas): void
-    {
-        if ($alternativasCorretas === 0) {
-            throw new \Exception('A questão deve ter uma alternativa correta', 1663702752);
-        }
-        if ($alternativasCorretas > 1) {
-            throw new \Exception('A questão só pode ter uma alternativa correta', 1663797428);
-        }
-    }
 }
 
 

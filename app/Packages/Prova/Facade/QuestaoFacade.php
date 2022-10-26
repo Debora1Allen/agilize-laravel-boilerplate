@@ -19,9 +19,9 @@ class QuestaoFacade
         return $questao;
     }
 
-    public function addAlternativas(Questao $questao, array $alternativas): Questao
+    public function addRespostas(Questao $questao, array $alternativas): Questao
     {
-        $this->questaoService->addAlternativas($questao, $alternativas);
+        $this->questaoService->addRespostas($questao, $alternativas);
         $this->questaoRepository->update($questao);
         return $questao;
     }

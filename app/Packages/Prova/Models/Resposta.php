@@ -24,10 +24,7 @@ class Resposta
 
         /**
          * @ORM\ManyToOne(
-         *     targetEntity="App\Packages\Prova\Models\Questao",
-         *     fetch="EXTRA_LAZY",
-         *     inversedBy="alternativas",
-         * )
+         *     targetEntity="App\Packages\Prova\Models\Questao",inversedBy="alternativas")
          */
         private Questao $questao;
 

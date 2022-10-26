@@ -6,12 +6,29 @@ use App\Packages\Aluno\Models\Aluno;
 use App\Packages\Aluno\Repository\AlunoRepository;
 use Illuminate\Support\Str;
 
+/**
+ *
+ */
 class AlunoFacade
 {
-    public function __construct(private AlunoRepository $alunoRepository)
+
+    /**
+     * @var AlunoRepository
+     */
+    protected AlunoRepository $alunoRepository;
+
+    /**
+     * @param AlunoRepository $alunoRepository
+     */
+    public function __construct(AlunoRepository $alunoRepository)
     {
+        $this->alunoRepository = $alunoRepository;
     }
 
+    /**
+     * @param string $nome
+     * @return Aluno
+     */
     public function create(string $nome)
     {
         $aluno = new Aluno($nome);
@@ -19,6 +36,9 @@ class AlunoFacade
         return $aluno;
     }
 
+    /**
+     * @return array|object[]
+     */
     public function findAll()
     {
         return $this->alunoRepository->findAll();

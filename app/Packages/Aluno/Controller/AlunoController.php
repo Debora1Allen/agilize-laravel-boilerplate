@@ -13,25 +13,26 @@ use Exception;
 
 class AlunoController extends Controller
 {
-    public function __construct(private AlunoRepository $alunoRepository, private AlunoFacade $alunoFacade)
+    protected AlunoRepository $alunoRepository;
+    protected AlunoFacade $alunoFacade;
+
+    /**
+     * @param AlunoRepository $alunoRepository
+     * @param AlunoFacade $alunoFacade
+     */
+    public function __construct(AlunoRepository $alunoRepository, AlunoFacade $alunoFacade)
     {
+        $this->alunoRepository = $alunoRepository;
+        $this->alunoFacade = $alunoFacade;
     }
 
     public function index()
     {
         try {
             $alunos = $this->alunoFacade->findAll();
-            $alunosArray = collect();
-
-            foreach ($alunos as $aluno){
-                $alunosArray->add([
-                    'id' => $aluno->getId(),
-                    'nome' => $aluno->getNome(),
-                ]);
-            }
-            return response()->json($alunosArray->toArray());
+            return response()->json(['data' => AlunoResponse::collection($alunos)]);
         }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1664303115);
+            throw new Exception($exception->getMessage(), 1666733656);
         }
     }
 
@@ -40,12 +41,9 @@ class AlunoController extends Controller
         try {
             $aluno = $this->alunoFacade->create($request->get('nome'));
             $this->alunoRepository->flush();
-            $data = [
-                'nome' => $aluno->getNome(),
-            ];
-            return response()->json([$data, ], 201);
+            return response()->json(['data' => AlunoResponse::item($aluno)], 201);
         }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1664303115);
+            throw new Exception($exception->getMessage(), 1666733670);
         }
     }
 
@@ -55,7 +53,7 @@ class AlunoController extends Controller
             $prova = $aluno->getProvas()->toArray();
             return response()->json(['data' => ProvaResponse::collection($prova)], 200);
         }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1664303115);
+            throw new Exception($exception->getMessage(), 1666733684);
         }
     }
 }

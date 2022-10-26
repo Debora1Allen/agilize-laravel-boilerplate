@@ -29,7 +29,7 @@ class TemaController extends Controller
             $temas = $this->temaFacade->getAll();
             return response()->json(['data' => TemaResponse::collection($temas)]);
         }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1664303115);
+            throw new Exception($exception->getMessage(), 1666748818);
         }
     }
 

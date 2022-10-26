@@ -16,12 +16,35 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ *
+ */
 class QuestaoController extends Controller
 {
-    public function __construct(private QuestaoRepository $questaoRepository, private QuestaoFacade $questaoFacade)
+    /**
+     * @var QuestaoRepository
+     */
+    protected QuestaoRepository $questaoRepository;
+    /**
+     * @var QuestaoFacade
+     */
+    protected QuestaoFacade $questaoFacade;
+
+    /**
+     * @param QuestaoRepository $questaoRepository
+     * @param QuestaoFacade $questaoFacade
+     */
+    public function __construct(QuestaoRepository $questaoRepository, QuestaoFacade $questaoFacade)
     {
+        $this->questaoRepository = $questaoRepository;
+        $this->questaoFacade = $questaoFacade;
     }
 
+
+    /**
+     * @return JsonResponse
+     * @throws Exception
+     */
     public function index()
     {
         try {
@@ -32,6 +55,11 @@ class QuestaoController extends Controller
         }
     }
 
+    /**
+     * @param Questao $questao
+     * @return JsonResponse
+     * @throws Exception
+     */
     public function show(Questao $questao)
     {
         try {
@@ -41,25 +69,36 @@ class QuestaoController extends Controller
         }
     }
 
+    /**
+     * @param QuestaoFormRequest $request
+     * @return JsonResponse
+     * @throws Exception
+     */
     public function store(QuestaoFormRequest $request)
     {
         try {
-            $questao = $this->questaoFacade->create($request->get('temaSlugname'), $request->get('pergunta'));
+            $questao = $this->questaoFacade->create($request->get('temaSlugname'), $request->get('texto'));
             $this->questaoRepository->flush();
             return response()->json(['data' => QuestaoResponse::item($questao)], 201);
         }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1664303115);
+            throw new Exception($exception->getMessage(), 1666748988);
         }
     }
 
+    /**
+     * @param Questao $questao
+     * @param RespostaFormRequest $request
+     * @return JsonResponse
+     * @throws Exception
+     */
     public function createRespostas(Questao $questao, RespostaFormRequest $request)
     {
         try {
-            $questao = $this->questaoFacade->addAlternativas($questao, $request->get('respostas'));
+            $questao = $this->questaoFacade->addRespostas($questao, $request->get('respostas'));
             $this->questaoRepository->flush();
             return response()->json(['data' => QuestaoResponse::item($questao)], 201);
         }catch (Exception $exception){
-            throw new Exception($exception->getMessage(), 1664303115);
+            throw new Exception($exception->getMessage(), 1666749054);
         }
     }
 }

@@ -33,6 +33,5 @@ class ProvaFacade
         return $prova;
     }
 
-
 }
 
